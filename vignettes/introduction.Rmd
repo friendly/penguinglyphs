@@ -1,0 +1,153 @@
+---
+title: "Introduction to penguinglyphs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to penguinglyphs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+## Overview
+
+The `penguinglyphs` package provides a unique way to visualize multivariate penguin data by mapping measurements to visual features of schematic penguin drawings. This approach makes patterns in the data immediately apparent and intuitive.
+
+## Installation
+
+```{r eval=FALSE}
+# Install from GitHub
+devtools::install_github("yourusername/penguinglyphs")
+```
+
+```{r setup}
+library(penguinglyphs)
+```
+
+## Visual Encoding
+
+The package uses the following mappings:
+
+- **Bill length** → horizontal extent of the bill
+- **Bill depth** → vertical thickness of the bill
+- **Flipper length** → length of the flippers
+- **Body mass** → overall body size
+- **Species** → body color (Adelie=orange, Chinstrap=purple, Gentoo=green)
+- **Sex** → eye shape (angular for males, round for females)
+
+## Basic Usage
+
+First, let's load the Palmer Penguins dataset:
+
+```{r}
+# Load penguin data
+data(penguins, package = "datasets")
+
+# Look at the structure
+head(penguins)
+```
+
+### Creating a Grid of Glyphs
+
+The main function is `penguin_glyphs()`, which creates a grid display:
+
+```{r fig.width=8, fig.height=6}
+# Visualize first 20 penguins
+penguin_glyphs(head(penguins, 20), main = "First 20 Palmer Penguins")
+```
+
+### Random Sample
+
+```{r fig.width=8, fig.height=6}
+set.seed(42)
+sampled_rows <- sample(1:nrow(penguins), size = 20)
+penguin_glyphs(penguins[sampled_rows, ], main = "Random Sample of Penguins")
+```
+
+## Drawing Individual Penguins
+
+For more control, you can draw individual penguins with `draw_penguin()`:
+
+```{r fig.width=6, fig.height=4}
+# Create plot area
+plot(1, xlim=c(0,4), ylim=c(0,2), type="n", asp=1,
+     xlab="", ylab="", main="Species Comparison")
+
+# Draw one of each species
+draw_penguin(1, 1, species="Adelie", sex="male", id="Adelie")
+draw_penguin(2, 1, species="Chinstrap", sex="female", id="Chinstrap")
+draw_penguin(3, 1, species="Gentoo", sex="male", id="Gentoo")
+```
+
+## Finding Patterns
+
+### Examining Outliers
+
+```{r fig.width=6, fig.height=3}
+# Look at some notable penguins
+outliers <- c(10, 35, 283)
+penguin_glyphs(penguins[outliers,], ncol=3, main = "Notable Penguins")
+```
+
+### Visual Lineup
+
+Create a lineup where you try to spot the outliers among normal penguins:
+
+```{r fig.width=8, fig.height=6}
+# Create a lineup for visual inference
+set.seed(123)
+cast <- c(sample(1:nrow(penguins), size = 17), outliers)
+lineup <- sample(cast, size = length(cast))
+penguin_glyphs(penguins[lineup,], main = "Can you spot the outliers?")
+```
+
+## Customization
+
+### Legend Placement
+
+```{r fig.width=8, fig.height=6}
+penguin_glyphs(penguins[sampled_rows, ], 
+               main = "Custom Legend",
+               legend = list(loc = "bottom", horiz = FALSE))
+```
+
+### Different Grid Layouts
+
+```{r fig.width=10, fig.height=4}
+# Fewer columns for a wider display
+penguin_glyphs(head(penguins, 15), 
+               ncol = 8, 
+               main = "Wide Layout")
+```
+
+## Interpreting the Glyphs
+
+When looking at penguin glyphs, you can quickly identify:
+
+1. **Size differences**: Larger body mass creates bigger penguins overall
+2. **Bill proportions**: Long, thin bills vs. short, deep bills
+3. **Flipper length**: Longer flippers extend further from the body
+4. **Species patterns**: Immediate identification via color
+5. **Sex differences**: Subtle but consistent eye shape differences
+
+This makes it easy to spot:
+- Species-specific morphology
+- Sexual dimorphism within species
+- Individual outliers
+- General population patterns
+
+## Conclusion
+
+The `penguinglyphs` package provides an intuitive way to explore multivariate data through visual encodings that leverage our natural ability to perceive shapes and patterns. It's particularly useful for:
+
+- Exploratory data analysis
+- Identifying outliers
+- Communicating patterns to diverse audiences
+- Teaching data visualization concepts

@@ -1,0 +1,26 @@
+Package: penguinglyphs
+Type: Package
+Title: Multivariate Penguin Data Visualization Using Glyphs
+Version: 0.1.0
+Authors@R: c(
+    person("Michael", "Friendly", email = "friendly@yorku.ca", 
+           role = c("aut", "cre"))
+    )
+Description: A system for visualizing multivariate penguin data as schematic 
+    penguin drawings. Physical measurements (bill length/depth, flipper length, 
+    body mass) are mapped to visual features of penguin glyphs, while species 
+    is encoded by color and sex by eye shape. Designed to work with the Palmer 
+    Penguins dataset.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    R (>= 3.5.0)
+Suggests:
+    datasets,
+    knitr,
+    rmarkdown
+RoxygenNote: 7.3.3
+VignetteBuilder: knitr
+URL: https://github.com/yourusername/penguinglyphs
+BugReports: https://github.com/yourusername/penguinglyphs/issues
