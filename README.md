@@ -1,3 +1,6 @@
+![GitHub last commit](https://img.shields.io/github/last-commit/friendly/penguinglyphs/)
+
+
 # penguinglyphs
 
 A system for visualizing multivariate penguin data as schematic penguin drawings. Physical measurements are mapped to visual features of penguin glyphs, making patterns in the data immediately apparent.
@@ -8,7 +11,7 @@ You can install the development version from GitHub:
 
 ```r
 # install.packages("devtools")
-devtools::install_github("yourusername/penguinglyphs")
+devtools::install_github("friendly/penguinglyphs")
 ```
 
 ## Visual Mappings

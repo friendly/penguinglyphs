@@ -24,7 +24,7 @@ The `penguinglyphs` package provides a unique way to visualize multivariate peng
 
 ```{r eval=FALSE}
 # Install from GitHub
-devtools::install_github("yourusername/penguinglyphs")
+devtools::install_github("friendly/penguinglyphs")
 ```
 
 ```{r setup}
