@@ -41,8 +41,11 @@ library(penguinglyphs)
 # Load penguin data
 data(penguins, package = "datasets")
 
-# Visualize first 20 penguins
-penguin_glyphs(head(penguins, 20), main = "Palmer Penguins")
+# Visualize a random sample
+set.seed(42)
+sampled_rows <- sample(1:nrow(penguins), size = 20)
+penguin_glyphs(penguins[sampled_rows, ], main = "Random Sample of Penguins")
+
 ```
 
 ### Drawing Individual Penguins
