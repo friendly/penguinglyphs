@@ -1,4 +1,7 @@
-![GitHub last commit](https://img.shields.io/github/last-commit/friendly/penguinglyphs/)
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+![GitHub last commit](https://img.shields.io/github/last-commit/friendly/penguinglyphs/master)
+<!-- badges: end -->⁠
 
 
 # penguinglyphs
