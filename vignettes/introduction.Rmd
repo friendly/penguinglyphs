@@ -1,6 +1,10 @@
 ---
 title: "Introduction to penguinglyphs"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+  fig_caption: yes
+bibliography: ["references.bib"]
+csl: apa.csl
 vignette: >
   %\VignetteIndexEntry{Introduction to penguinglyphs}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,7 +22,17 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The `penguinglyphs` package provides a unique way to visualize multivariate penguin data by mapping measurements to visual features of schematic penguin drawings. This approach makes patterns in the data immediately apparent and intuitive.
+In data visualization, a "glyph" is a small graphical object, such as a shape, icon, or marker, that represents a single observation. Glyphs are used to visualize multidimensional data by encoding different variables into various visual attributes like shape, size, color, and orientation. The use of "glyphs" to represent multivariate data has a long history [@Ward2008]. One of the early uses, by Edgar Anderson [-@Anderson:1957], used circular glyphs with rays to study botanical species, including the famous Iris Flowers [@Kleinman:2002].
+More recently, @Chernoff:1973 introduced the use of schematic faces that could represent up to 15 data variables
+simultaneously.
+
+The `penguinglyphs` package is an experiment in the use of glyphs to represent the observations in
+the datasets on Penguins in Antartica, now in the R `datasets::penguins`.
+The first step was to see how Penguin features, like body mass, flipper length and the length and depth of
+their bills could be represented parametrically, and thus encoded in ways to permit drawing a penguin observation
+using R graphics like `polygon()`, `segments()` and so forth.
+
+provides a unique way to visualize multivariate penguin data by mapping measurements to visual features of schematic penguin drawings. This approach makes patterns in the data immediately apparent and intuitive.
 
 ## Installation
 
