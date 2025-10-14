@@ -1,11 +1,12 @@
 Package: penguinglyphs
 Type: Package
 Title: Multivariate Penguin Data Visualization Using Glyphs
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
-    person("Michael", "Friendly", email = "friendly@yorku.ca", 
-           role = c("aut", "cre"))
-    )
+  person(given = "Michael", family = "Friendly", 
+         role=c("aut", "cre"), email="friendly@yorku.ca",
+         comment=c(ORCID="0000-0002-3237-0941"))
+  )
 Description: A system for visualizing multivariate penguin data as schematic 
     penguin drawings. Physical measurements (bill length/depth, flipper length, 
     body mass) are mapped to visual features of penguin glyphs, while species 

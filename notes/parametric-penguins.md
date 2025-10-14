@@ -37,6 +37,7 @@ The `penguinglyphs` package is now on GitHub, https://github.com/friendly/pengui
 
 **TODO**
 
+
 * The current version of `draw_penguin()` in `R/draw_penguin.R` is too representational, in that the penguin body
 size totally dominates the visual display. Design an alternative version `draw_penguin_cartoon()` based on
 a cartoon penguin with a much smaller head and larger bill and flippers as in the image under `notes/penguin-cartoon.jpg`.
