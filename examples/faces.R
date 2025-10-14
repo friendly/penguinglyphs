@@ -33,4 +33,14 @@ plt <- ggplot(penguins[sampled_rows,],
                   fill = species, nose = bill_len)) +
   geom_chernoff()
                           
+## aplpack
+## 
+# see: https://www.researchgate.net/profile/Annika-Hamachers/publication/353482405_Giving_your_data_a_face_-_Chernoff_plots_in_R/links/60fffa5e1e95fe241a8ffc65/Giving-your-data-a-face-Chernoff-plots-in-R.pdf
+# 
+
+library(aplpack)
+faces(penguins[sampled_rows, 3:6])
+
+faces(penguins[sampled_rows, 3:6], face.type = 2)
+
 
