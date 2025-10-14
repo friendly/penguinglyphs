@@ -6,7 +6,8 @@
 
 # penguinglyphs
 
-A system for visualizing multivariate penguin data as schematic penguin drawings. Physical measurements are mapped to visual features of penguin glyphs, making patterns in the data immediately apparent.
+An experiment in visualizing multivariate penguin data as schematic penguin drawings. Physical measurements are mapped to visual features of penguin glyphs, making patterns in the data immediately apparent. Or do they?
+Designed to test some ideas in using glyphs to represent multivariate data, in a novel context.
 
 ## Installation
 
@@ -93,7 +94,8 @@ Glyph-based visualizations allow you to see patterns across multiple dimensions 
 
 ## Related
 
-This package is designed to work with the [Palmer Penguins](https://allisonhorst.github.io/palmerpenguins/) dataset, a popular alternative to the iris dataset for data exploration and visualization examples.
+This package is designed to work with what was originally the [Palmer Penguins](https://allisonhorst.github.io/palmerpenguins/) dataset, but now (R 4.5.0) in `datasets::penguins`,
+a popular alternative to the iris dataset for data exploration and visualization examples.
 
 ## License
 
