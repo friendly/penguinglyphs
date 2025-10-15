@@ -25,17 +25,17 @@
 #' @return NULL (creates a plot)
 #'
 #' @examples
-#' \dontrun{
 #' # Load the penguins dataset (requires palmerpenguins or datasets package)
 #' data(penguins, package = "datasets")
 #' 
-#' # Visualize first 20 penguins
-#' penguin_glyphs(head(penguins, 20), main = "Palmer Penguins")
+#' # Visualize first 5 penguins in each species
+#' which <- outer(1:5, c(0, 152, 277), FUN ="+") |> c()
+#' penguin_glyphs(penguins[which,])
 #' 
 #' # Sample random penguins
 #' set.seed(42)
 #' sampled_rows <- sample(1:nrow(penguins), size = 20)
-#' penguin_glyphs(penguins[sampled_rows, ], main = "Random Sample")
+#' penguin_glyphs(penguins[sampled_rows, ], main = "Random Penguin Glyphs")
 #' 
 #' # Look at specific outliers
 #' outliers <- c(10, 35, 283)
@@ -44,7 +44,6 @@
 #' # Custom legend position
 #' penguin_glyphs(penguins[sampled_rows, ], 
 #'                legend = list(loc = "bottom", horiz = FALSE))
-#' }
 #'
 #' @export
 penguin_glyphs <- function(data, 
@@ -56,7 +55,7 @@ penguin_glyphs <- function(data,
                            sex = "sex",
                            ncol = 5,
                            main = "Penguin Glyphs",
-                           legend = list(loc = "topleft", horiz = TRUE)) {
+                           legend = list(loc = "topleft", horiz = FALSE)) {
   
   n <- nrow(data)
   nrow_grid <- ceiling(n / ncol)
@@ -69,7 +68,7 @@ penguin_glyphs <- function(data,
   body_norm <- normalize_var(data[[body_mass]], 0.7, 1.3)
   
   # Setup plot
-  par(mar = c(2, 2, 3, 2))
+  par(mar = c(2, 5, 3, 2))
   plot(1, type = "n", xlim = c(0, ncol), ylim = c(0, nrow_grid),
        xlab = "", ylab = "", main = main, axes = FALSE, asp = 1)
   

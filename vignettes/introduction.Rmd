@@ -27,12 +27,10 @@ More recently, @Chernoff:1973 introduced the use of schematic faces that could r
 simultaneously.
 
 The `penguinglyphs` package is an experiment in the use of glyphs to represent the observations in
-the datasets on Penguins in Antartica, now in the R `datasets::penguins`.
+the datasets on Penguins in Antartica, now in the R datasets `datasets::penguins`.
 The first step was to see how Penguin features, like body mass, flipper length and the length and depth of
-their bills could be represented parametrically, and thus encoded in ways to permit drawing a penguin observation
-using R graphics like `polygon()`, `segments()` and so forth.
+their bills could be represented **parametrically**, and thus encoded in ways to permit drawing a penguin observation using R graphics like `polygon()`, `segments()` and so forth.
 
-provides a unique way to visualize multivariate penguin data by mapping measurements to visual features of schematic penguin drawings. This approach makes patterns in the data immediately apparent and intuitive.
 
 ## Installation
 
@@ -70,12 +68,26 @@ head(penguins)
 
 ### Creating a Grid of Glyphs
 
-The main function is `penguin_glyphs()`, which creates a grid display:
+The main function is `penguin_glyphs()`, which creates a grid display, 5 columns wide by default.
+Here, I show the first five penguins of each species.
 
-```{r fig.width=8, fig.height=6}
-# Visualize first 20 penguins
-penguin_glyphs(head(penguins, 20), main = "First 20 Palmer Penguins")
+```{r}
+#| label: fig-peng15
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: Glyphs for the first five penguins in each species
+# Visualize first 5 penguins in each species
+which <- outer(1:5, c(0, 152, 277), FUN ="+") |> c()
+penguin_glyphs(penguins[which,])
 ```
+
+What happened with case 4? It contains missing missing `NA` values, so no glyph is drawn.
+Henceforth, I'll work with the subset that contains no missing values
+
+```{r}
+penguins <- na.omit(penguins)
+```
+
 
 ### Random Sample
 
@@ -104,9 +116,36 @@ draw_penguin(3, 1, species="Gentoo", sex="male", id="Gentoo")
 
 ### Examining Outliers
 
+Unusual multivariate cases are easily identified using Mahalanobis $D^2$. Here, I find the three most noteworthy observations
+in the total sample (ignoring `species`).
+
+```{r}
+library(heplots)
+DSQ <- heplots::Mahalanobis(penguins[, 3:6])
+outliers <- order(DSQ, decreasing = TRUE)[1:3] |>
+  print()
+```
+
+You can see them in a $\chi^2$ QQ plot of the quantiles of the $D^2$ values against what they would be in a multivariate normal
+distribution for four variables.
+
+```{r}
+clr <- c(Adelie = "#F37A00", Chinstrap = "#6A3D9A", Gentoo = "#33a02c")
+pch <- c(19, 17, 15)   # ggplot symbol defaults for a factor
+
+out <- heplots::cqplot(peng[, 3:6], 
+   id.n = 3,
+   col = clr[penguins$species],
+   pch = pch[penguins$species],
+   ref.col = "grey",
+   what = "Penguin numeric variables",
+   cex.lab = 1.25)
+out
+```
+
+
 ```{r fig.width=6, fig.height=3}
 # Look at some notable penguins
-outliers <- c(10, 35, 283)
 penguin_glyphs(penguins[outliers,], ncol=3, main = "Notable Penguins")
 ```
 
