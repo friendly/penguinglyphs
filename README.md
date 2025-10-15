@@ -4,7 +4,7 @@
 <!-- badges: end -->⁠
 
 
-# penguinglyphs
+# penguinglyphs <img src="man/figures/logo.svg" height="200" style="float:right; height:200px;"/>
 
 An experiment in visualizing multivariate penguin data as schematic penguin drawings. Physical measurements are mapped to visual features of penguin glyphs, making patterns in the data immediately apparent. Or do they?
 Designed to test some ideas in using glyphs to represent multivariate data, in a novel context.

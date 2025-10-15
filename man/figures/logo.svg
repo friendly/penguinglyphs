@@ -1,0 +1,78 @@
+<svg viewBox="0 0 200 231" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hexagon background -->
+  <polygon points="100,10 190,65 190,166 100,221 10,166 10,65" 
+           fill="#F0F0F0" 
+           stroke="#333" 
+           stroke-width="3"/>
+  
+  <!-- Penguin body (curved, teardrop shape) -->
+  <ellipse cx="100" cy="85" rx="20" ry="28" 
+           fill="#4A7BA7" 
+           stroke="#1a1a2e" 
+           stroke-width="2.5"/>
+  
+  <!-- White belly oval -->
+  <ellipse cx="100" cy="87" rx="12" ry="20" 
+           fill="white" 
+           stroke="none"/>
+  
+  <!-- Penguin head -->
+  <circle cx="100" cy="55" r="10" 
+          fill="#4A7BA7" 
+          stroke="#1a1a2e" 
+          stroke-width="2.5"/>
+  
+  <!-- Bill (triangular, prominent, longer and thicker) -->
+  <polygon points="107,53 128,54 107,57" 
+           fill="#FF6B35" 
+           stroke="#1a1a2e" 
+           stroke-width="1.5"/>
+  
+  <!-- Left flipper (wing-like) -->
+  <path d="M 85,75 L 65,72 L 80,85 Z" 
+        fill="#4A7BA7" 
+        stroke="#1a1a2e" 
+        stroke-width="2.5"/>
+  
+  <!-- Right flipper (wing-like) -->
+  <path d="M 115,75 L 135,72 L 120,85 Z" 
+        fill="#4A7BA7" 
+        stroke="#1a1a2e" 
+        stroke-width="2.5"/>
+  
+  <!-- Eye -->
+  <circle cx="103" cy="52" r="2.5" 
+          fill="white" 
+          stroke="#1a1a2e" 
+          stroke-width="1"/>
+  <circle cx="103" cy="52" r="1" 
+          fill="#1a1a2e"/>
+  
+  <!-- Left foot -->
+  <polygon points="92,110 88,116 96,116" 
+           fill="#FF6B35" 
+           stroke="#1a1a2e" 
+           stroke-width="1.5"/>
+  
+  <!-- Right foot -->
+  <polygon points="108,110 104,116 112,116" 
+           fill="#FF6B35" 
+           stroke="#1a1a2e" 
+           stroke-width="1.5"/>
+  
+  <!-- Text: "penguin" -->
+  <text x="100" y="150" 
+        font-family="Arial, Helvetica, sans-serif" 
+        font-size="28" 
+        font-weight="bold" 
+        fill="#1a1a2e" 
+        text-anchor="middle">penguin</text>
+  
+  <!-- Text: "glyphs" -->
+  <text x="100" y="180" 
+        font-family="Arial, Helvetica, sans-serif" 
+        font-size="28" 
+        font-weight="bold" 
+        fill="#1a1a2e" 
+        text-anchor="middle">glyphs</text>
+</svg>
