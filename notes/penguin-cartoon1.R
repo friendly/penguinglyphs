@@ -255,24 +255,3 @@ penguin_glyphs_cartoon <- function(data = NULL,
          bty = "n")
 }
 
-
-#' Normalize Variable for Visual Scaling
-#'
-#' Internal helper function that wasn't exported but is needed
-#'
-#' @param x numeric vector to normalize
-#' @param min_scale minimum scale value (default 0.7)
-#' @param max_scale maximum scale value (default 1.3)
-#'
-#' @return normalized numeric vector
-normalize_var <- function(x, min_scale = 0.7, max_scale = 1.3) {
-  if (all(is.na(x))) return(rep(1, length(x)))
-  x_min <- min(x, na.rm = TRUE)
-  x_max <- max(x, na.rm = TRUE)
-  if (x_max == x_min) return(rep(1, length(x)))
-  
-  normalized <- (x - x_min) / (x_max - x_min)
-  scaled <- min_scale + normalized * (max_scale - min_scale)
-  scaled[is.na(scaled)] <- 1
-  return(scaled)
-}
