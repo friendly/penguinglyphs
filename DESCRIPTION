@@ -23,7 +23,9 @@ Suggests:
     knitr,
     rmarkdown,
     heplots,
-    aplpack
+    aplpack,
+    dplyr,
+    tidyr
 RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 URL: https://github.com/yourusername/penguinglyphs

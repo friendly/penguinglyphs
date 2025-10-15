@@ -85,7 +85,7 @@ What happened with case 4? It contains missing missing `NA` values, so no glyph 
 Henceforth, I'll work with the subset that contains no missing values
 
 ```{r}
-penguins <- na.omit(penguins)
+penguins <- tidyr::drop_na(penguins)
 ```
 
 
@@ -151,6 +151,14 @@ penguin_glyphs(penguins[outliers,], ncol=3, main = "Notable Penguins")
 
 ### Visual Lineup
 
+A "line-up" test [@Buja-etal2009]
+has been proposed as a **human significance test*: Can an observer spot a difference that rejects a null hypothesis?
+This is more a test of a data visualization per se than of the human observer. 
+
+
+
+Here are glyphs for 20 penguins, representing the main variables with visual features.
+
 Create a lineup where you try to spot the outliers among normal penguins:
 
 ```{r fig.width=8, fig.height=6}
@@ -164,6 +172,8 @@ penguin_glyphs(penguins[lineup,], main = "Can you spot the outliers?")
 ## Customization
 
 ### Legend Placement
+
+In the current version, legend placement doesn't work all that well, but you can try to modify it.
 
 ```{r fig.width=8, fig.height=6}
 penguin_glyphs(penguins[sampled_rows, ], 
