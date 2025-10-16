@@ -54,6 +54,16 @@ knitr::include_graphics(here::here("man/figures/flowing-data-cartoonish-faces.pn
 
 This was drawn using the function `aplpack::faces()`. The modern version also applies color to the eyes, hair, lips and ears;
 however, these colors cannot be assigned to variables in the dataset.
+If you call `faces()` without any data, it gives a demo using three variables.
+
+```{r}
+#| label: fig-faces-demo
+#| fig-width: 9
+#| fig-height: 9
+#| out-width: "90%"
+faces() 
+```
+
 
 ```{r}
 library(aplpack)
