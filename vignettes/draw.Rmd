@@ -1,8 +1,12 @@
 ---
-title: "How to Draw a Penquin"
-output: rmarkdown::html_vignette
+title: "How to Draw a Penguin"
+output: 
+  rmarkdown::html_vignette:
+  fig_caption: yes
+bibliography: ["references.bib"]
+csl: apa.csl
 vignette: >
-  %\VignetteIndexEntry{How to Draw a Penquin}
+  %\VignetteIndexEntry{How to Draw a Penguin}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,7 +14,10 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  fig.aligh = "center"
 )
 ```
 
@@ -18,13 +25,54 @@ knitr::opts_chunk$set(
 library(penguinglyphs)
 ```
 
+## Glyphs
+
 Drawing a glyph to represent a multivariate observation entails mapping the values of variables onto visual features of
 the glyph. This is easy when the glyph is a simple geometric shape, as in Edgar Anderson's [-@Anderson:1957], use of
 circular glyphs with rays whose angles and lengths could represent numerous variables.
 
 ```{r}
-knitr::include_graphics("man/figures/anderson_glyphs1/jpg")
+#| label: fig-anderson-glyph
+#| echo: false
+#| out-width: "60%"
+#| fig-cap: "Illustration of Edgar Anderson's [-@Anderson:1957] glyphs for multivariate data."
+knitr::include_graphics(here::here("man/figures/anderson_glyphs1.jpg"))
 ```
 
+A more interesting idea for glyphs due to @Chernoff:1973 is to assign variables to features of a human face, such as the size and shape of
+eyes, ears, nose and hair, based on the values in a dataset. The assumption is that we can read people’s faces easily in real life, so we should be able to recognize small differences when they represent data. 
+@fig-faces-yau shows this idea using data on rates of serious crime (murder, rape, aggravated assult, ..) in the US states.
+This figure comes from Nathan Yau's [How to visualize data with cartoonish faces ala Chernoff](https://flowingdata.com/2010/08/31/how-to-visualize-data-with-cartoonish-faces/).
+
+```{r}
+#| label: fig-faces-yau
+#| echo: false
+#| out-width: "70%"
+#| fig-cap: "Chernoff-style faces example from Nathan Yau"
+knitr::include_graphics(here::here("man/figures/flowing-data-cartoonish-faces.png"))
+```
+
+This was drawn using the function `aplpack::faces()`. The modern version also applies color to the eyes, hair, lips and ears;
+however, these colors cannot be assigned to variables in the dataset.
+
+```{r}
+library(aplpack)
+crime <- read.csv("http://datasets.flowingdata.com/crimeRatesByState-formatted.csv")
+str(crime)
+```
+
+The call to `faces()` draws the faces and prints a list of the assignment of variables to visual features:
+```{r}
+#| label: fig-faces-crime
+#| fig-width: 9
+#| fig-height: 9
+#| out-width: "90%"
+faces(crime[, 2:8], 
+      labels = crime$state,
+      cex = 1)
+```
+
+
+# Penguin glyphs
 
 
