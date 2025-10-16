@@ -130,13 +130,18 @@ draw_penguin_cartoon <- function(x, y,
   right_eye_x <- x + head_size * 0.25
   
   if (sex == "female") {
-    # Round eyes for females
-    symbols(left_eye_x, eye_y, circles = eye_size, 
-            inches = FALSE, add = TRUE, 
-            fg = "black", bg = "white", lwd = 1.5)
-    symbols(right_eye_x, eye_y, circles = eye_size, 
-            inches = FALSE, add = TRUE, 
-            fg = "black", bg = "white", lwd = 1.5)
+    # Round eyes for females - draw as circles
+    eye_theta <- seq(0, 2 * pi, length.out = 50)
+    left_eye_x_coords <- left_eye_x + eye_size * cos(eye_theta)
+    left_eye_y_coords <- eye_y + eye_size * sin(eye_theta)
+    polygon(left_eye_x_coords, left_eye_y_coords, 
+            col = "white", border = "black", lwd = 1.5)
+    
+    right_eye_x_coords <- right_eye_x + eye_size * cos(eye_theta)
+    right_eye_y_coords <- eye_y + eye_size * sin(eye_theta)
+    polygon(right_eye_x_coords, right_eye_y_coords, 
+            col = "white", border = "black", lwd = 1.5)
+    
     # Pupils
     points(left_eye_x, eye_y, pch = 19, cex = 0.4)
     points(right_eye_x, eye_y, pch = 19, cex = 0.4)
@@ -266,3 +271,24 @@ penguin_glyphs_cartoon <- function(data = NULL,
          bty = "n")
 }
 
+
+#' Normalize Variable for Visual Scaling
+#'
+#' Internal helper function that wasn't exported but is needed
+#'
+#' @param x numeric vector to normalize
+#' @param min_scale minimum scale value (default 0.7)
+#' @param max_scale maximum scale value (default 1.3)
+#'
+#' @return normalized numeric vector
+normalize_var <- function(x, min_scale = 0.7, max_scale = 1.3) {
+  if (all(is.na(x))) return(rep(1, length(x)))
+  x_min <- min(x, na.rm = TRUE)
+  x_max <- max(x, na.rm = TRUE)
+  if (x_max == x_min) return(rep(1, length(x)))
+  
+  normalized <- (x - x_min) / (x_max - x_min)
+  scaled <- min_scale + normalized * (max_scale - min_scale)
+  scaled[is.na(scaled)] <- 1
+  return(scaled)
+}

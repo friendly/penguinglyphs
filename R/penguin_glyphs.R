@@ -68,7 +68,7 @@ penguin_glyphs <- function(data,
   body_norm <- normalize_var(data[[body_mass]], 0.7, 1.3)
   
   # Setup plot
-  par(mar = c(2, 5, 3, 2))
+  par(mar = c(2, 5, 3, 2), xpd=TRUE)
   plot(1, type = "n", xlim = c(0, ncol), ylim = c(0, nrow_grid),
        xlab = "", ylab = "", main = main, axes = FALSE, asp = 1)
   

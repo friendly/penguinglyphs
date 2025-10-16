@@ -110,4 +110,25 @@ That's pretty good, but make the penguin bill a bit longer and thicker.
 
 The bill is now much more prominent and the package description follows the standard hex sticker format with text along the edge!
 
+Debug penguin_cartoon.R
+
+There's a bug in your code for penguin cartoons, which I'm uploading. Can you find the problem and fix it?
+I get an error when I run this code:
+
+```
+library(penguinglyphs)
+source("notes/penguin-cartoon.R")
+data(penguins, package = "datasets")
+which <- outer(1:5, c(0, 152, 277), FUN ="+") |> c()
+penguin_glyphs_cartoon(penguins[which,])
+```
+
+The error message is:
+
+```
+Error in symbols(left_eye_x, eye_y, circles = eye_size, inches = FALSE,  : 
+  invalid symbol parameter
+Called from: symbols(left_eye_x, eye_y, circles = eye_size, inches = FALSE, 
+    add = TRUE, fg = "black", bg = "white", lwd = 1.5)
+```
 

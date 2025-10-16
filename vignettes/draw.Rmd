@@ -1,0 +1,30 @@
+---
+title: "How to Draw a Penquin"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How to Draw a Penquin}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(penguinglyphs)
+```
+
+Drawing a glyph to represent a multivariate observation entails mapping the values of variables onto visual features of
+the glyph. This is easy when the glyph is a simple geometric shape, as in Edgar Anderson's [-@Anderson:1957], use of
+circular glyphs with rays whose angles and lengths could represent numerous variables.
+
+```{r}
+knitr::include_graphics("man/figures/anderson_glyphs1/jpg")
+```
+
+
+
