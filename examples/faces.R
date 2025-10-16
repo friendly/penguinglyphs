@@ -39,8 +39,16 @@ plt <- ggplot(penguins[sampled_rows,],
 # 
 
 library(aplpack)
+set.seed(42)
+sampled_rows <- sample(1:nrow(penguins), size = 20)
 faces(penguins[sampled_rows, 3:6])
 
 faces(penguins[sampled_rows, 3:6], face.type = 2)
+
+# first 5 in each species
+which <- outer(1:5, c(0, 152, 277), FUN ="+") |> c()
+faces(penguins[which, 3:6], ncol.plot = 5, 
+      nrow.plot = 3)
+
 
 
