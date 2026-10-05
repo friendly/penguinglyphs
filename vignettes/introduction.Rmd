@@ -50,9 +50,13 @@ The package uses the following mappings:
 - **Bill length** → horizontal extent of the bill
 - **Bill depth** → vertical thickness of the bill
 - **Flipper length** → length of the flippers
-- **Body mass** → overall body size
+- **Body mass** → area of the body
 - **Species** → body color (Adelie=orange, Chinstrap=purple, Gentoo=green)
 - **Sex** → eye shape (angular for males, round for females)
+
+Each measurement is converted to a scale factor between 0.7 and 1.3, according to where it falls in the range
+of that variable in the full `penguins` dataset. The vignette *How to Draw a Penguin* shows how the glyph is
+constructed, and what each of these features looks like over its range.
 
 ## Basic Usage
 
@@ -81,20 +85,28 @@ which <- outer(1:5, c(0, 152, 277), FUN ="+") |> c()
 penguin_glyphs(penguins[which,])
 ```
 
-What happened with case 4? It contains missing `NA` values, so the glyph is drawn only as a dashed outline.
-Henceforth, I'll work with the subset that contains no missing values
+What happened with case 4? All of its measurements are missing (`NA`), so the glyph is drawn only as a dashed outline.
+Henceforth, I'll work with the subset, `peng`, of the 333 penguins that have no missing values.
 
 ```{r}
-penguins <- tidyr::drop_na(penguins)
+peng <- na.omit(penguins)
+rownames(peng) <- NULL
+nrow(peng)
 ```
+
+The row names are used as the labels in the glyphs. `na.omit()` keeps the original ones, which then have gaps where
+penguins were dropped; resetting them numbers the complete cases from 1 to 333.
+This matters for identifying particular penguins. `peng` is then the same as the dataset `heplots::peng`, apart from the
+names of some variables, so the case numbers shown here are the same as those in analyses of that dataset, as in
+@Friendly:2024:VisMLM.
 
 
 ### Random Sample
 
 ```{r fig.width=8, fig.height=6}
 set.seed(42)
-sampled_rows <- sample(1:nrow(penguins), size = 20)
-penguin_glyphs(penguins[sampled_rows, ], main = "Random Sample of Penguins")
+sampled_rows <- sample(1:nrow(peng), size = 20)
+penguin_glyphs(peng[sampled_rows, ], main = "Random Sample of Penguins")
 ```
 
 ## Drawing Individual Penguins
@@ -112,6 +124,48 @@ draw_penguin(2, 1, species="Chinstrap", sex="female", id="Chinstrap", size = 1.5
 draw_penguin(3, 1, species="Gentoo", sex="male", id="Gentoo", size = 1.5)
 ```
 
+## Glyphs in Other Plots
+
+A glyph is sized in inches rather than in the units of the axes, so it has the same shape and size in any plot,
+in the same way as a plotting symbol.
+`penguin_points()` uses this to add a glyph for each row of a data frame at given coordinates in an existing plot,
+as `points()` does for ordinary symbols. `penguin_legend()` adds a legend for the species.
+
+Here, the glyphs for a sample of 40 penguins are the points in a scatterplot of body mass against flipper length.
+The glyphs repeat what the axes show, in that penguins toward the right have longer flippers and those toward the top have
+larger bodies, but they also show the bill and the sex of each penguin.
+
+```{r}
+#| label: fig-scatter
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: Penguin glyphs as the point symbols in a scatterplot
+set.seed(42)
+show <- sample(nrow(peng), 40)
+samp <- peng[show, ]
+
+plot(body_mass ~ flipper_len, data = samp, type = "n",
+     xlab = "Flipper length (mm)", ylab = "Body mass (g)")
+penguin_points(samp$flipper_len, samp$body_mass, samp)
+penguin_legend("topleft", samp$species)
+```
+
+The coordinates need not be variables in the data. A more useful display puts the glyphs in the space
+of the first two principal components, so that position summarizes all four measurements, and the glyph shows what
+lies behind it.
+
+```{r}
+#| label: fig-pca
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: Penguin glyphs in the space of the first two principal components
+pca <- prcomp(peng[, 3:6], scale. = TRUE)
+
+plot(pca$x[, 1:2], type = "n", asp = 1)
+penguin_points(pca$x[show, 1], pca$x[show, 2], samp)
+penguin_legend("top", samp$species, horiz = TRUE)
+```
+
 ## Finding Patterns
 
 ### Examining Outliers
@@ -121,7 +175,7 @@ in the total sample (ignoring `species`).
 
 ```{r}
 library(heplots)
-DSQ <- heplots::Mahalanobis(penguins[, 3:6])
+DSQ <- heplots::Mahalanobis(peng[, 3:6])
 outliers <- order(DSQ, decreasing = TRUE)[1:3] |>
   print()
 ```
@@ -133,10 +187,10 @@ distribution for four variables.
 clr <- c(Adelie = "#F37A00", Chinstrap = "#6A3D9A", Gentoo = "#33a02c")
 pch <- c(19, 17, 15)   # ggplot symbol defaults for a factor
 
-out <- heplots::cqplot(penguins[, 3:6], 
+out <- heplots::cqplot(peng[, 3:6], 
    id.n = 3,
-   col = clr[penguins$species],
-   pch = pch[penguins$species],
+   col = clr[peng$species],
+   pch = pch[peng$species],
    ref.col = "grey",
    what = "Penguin numeric variables",
    cex.lab = 1.25)
@@ -144,9 +198,39 @@ out
 ```
 
 
+What makes these penguins unusual? Their glyphs are labeled with the same case numbers as in the QQ plot.
+
 ```{r fig.width=6, fig.height=3}
-# Look at some notable penguins
-penguin_glyphs(penguins[outliers,], ncol=3, main = "Notable Penguins")
+# Look at some notable peng
+penguin_glyphs(peng[outliers,], ncol=3, main = "Notable Penguins")
+```
+
+It also helps to see where they are in relation to the rest. Here, all the penguins are shown as small points
+in plots of the principal components, and only the three outliers are drawn as glyphs.
+
+The plot of the first two components, which account for most of the variance, is the one usually looked at.
+But none of the three is at all unusual there. Multivariate outliers tend to show up instead in the dimensions
+with the *smallest* variance [@Friendly:2024:VisMLM]: these are the directions in which the data vary least,
+so a penguin that departs from the pattern of correlations among the variables stands out.
+In the plot of the last two components, all three are on the periphery: penguins 283 and 10 are at opposite ends of the third dimension,
+and 35 is at the top of the fourth.
+
+```{r}
+#| label: fig-pca-outliers
+#| fig-width: 10
+#| fig-height: 5.5
+#| fig-cap: "The three most unusual penguins, shown as glyphs in plots of the first two principal components (left) and the last two (right)."
+op <- par(mfrow = c(1, 2), mar = c(4, 4, 2, 1))
+for (dims in list(1:2, 3:4)) {
+  plot(pca$x[, dims], asp = 1, pch = 16, cex = 0.7,
+       xlim = extendrange(pca$x[, dims[1]], f = 0.15),   # room for the glyphs
+       col = penguin_colors()[as.character(peng$species)],
+       main = paste("Dimensions", dims[1], "and", dims[2]))
+  penguin_points(pca$x[outliers, dims[1]], pca$x[outliers, dims[2]], peng[outliers, ],
+                 size = 0.7, id = TRUE)
+}
+penguin_legend("bottomright", peng$species)
+par(op)
 ```
 
 ### Visual Lineup
@@ -157,17 +241,20 @@ This is more a test of a data visualization per se than of the human observer.
 
 
 
-Here are glyphs for 20 penguins, representing the main variables with visual features.
-
-Create a lineup where you try to spot the outliers among normal penguins:
+Here, the idea is turned around, to ask whether the unusual penguins can be picked out from their glyphs alone.
+The display shows 17 penguins chosen at random, together with the three outliers found above, in a random order.
 
 ```{r fig.width=8, fig.height=6}
 # Create a lineup for visual inference
 set.seed(123)
-cast <- c(sample(1:nrow(penguins), size = 17), outliers)
+cast <- c(sample(1:nrow(peng), size = 17), outliers)
 lineup <- sample(cast, size = length(cast))
-penguin_glyphs(penguins[lineup,], main = "Can you spot the outliers?")
+penguin_glyphs(peng[lineup,], main = "Can you spot the outliers?")
 ```
+
+The outliers are peng `r paste(rownames(peng)[outliers], collapse = ", ")`. If you can't find them
+without the labels, that says something about how well these glyphs convey what makes a penguin unusual in four dimensions,
+which need not be an extreme value on any one of them, as the principal component plots showed.
 
 ## Customization
 
@@ -177,41 +264,70 @@ The legend is placed outside the grid of glyphs, at the top left by default. You
 or lay it out horizontally.
 
 ```{r fig.width=8, fig.height=6}
-penguin_glyphs(penguins[sampled_rows, ], 
+penguin_glyphs(peng[sampled_rows, ], 
                main = "Custom Legend",
                legend = list(loc = "bottom", horiz = TRUE))
+```
+
+### Scaling
+
+By default, the size of each feature reflects where a penguin falls in the range of the *whole* dataset,
+so a penguin looks the same whichever others it is shown with. The `ref` argument changes the reference data.
+With `ref = data`, the features are scaled to the ranges in just the penguins being plotted,
+which exaggerates the differences among them. Compare the three outliers, scaled in each way.
+
+```{r fig.width=6, fig.height=3}
+penguin_glyphs(peng[outliers,], ncol = 3, main = "Scaled to all peng")
+```
+
+```{r fig.width=6, fig.height=3}
+penguin_glyphs(peng[outliers,], ncol = 3, main = "Scaled to these three",
+               ref = peng[outliers,])
+```
+
+### Label Size
+
+`cex.lab` controls the size of the labels in the glyphs.
+
+```{r fig.width=8, fig.height=6}
+penguin_glyphs(peng[sampled_rows, ], cex.lab = 0.7, main = "Smaller labels")
 ```
 
 ### Different Grid Layouts
 
 ```{r fig.width=10, fig.height=4}
 # Fewer columns for a wider display
-penguin_glyphs(head(penguins, 15), 
+penguin_glyphs(head(peng, 15), 
                ncol = 8, 
                main = "Wide Layout")
 ```
 
 ## Interpreting the Glyphs
 
-When looking at penguin glyphs, you can quickly identify:
+When looking at penguin glyphs, the features are not all equally easy to read:
 
-1. **Size differences**: Larger body mass creates bigger penguins overall
-2. **Bill proportions**: Long, thin bills vs. short, deep bills
-3. **Flipper length**: Longer flippers extend further from the body
-4. **Species patterns**: Immediate identification via color
-5. **Sex differences**: Subtle but consistent eye shape differences
+1. **Species** is identified immediately, by color.
+2. **Body mass** is the most conspicuous of the measurements: a heavier penguin has a larger body.
+3. **Bill proportions**: length and depth are read together, as long, thin bills vs. short, deep bills.
+4. **Flipper length**: longer flippers extend further from the body, but the differences are modest.
+5. **Sex**: the difference in eye shape is consistent, but subtle, and hard to see when the glyphs are small.
 
-This makes it easy to spot:
-- Species-specific morphology
-- Sexual dimorphism within species
-- Individual outliers
-- General population patterns
+In the displays above, this is enough to see species-specific morphology, such as the large bodies, long flippers
+and thin bills of the Gentoos. Differences among the penguins of one species, including those between males and females,
+are harder to see.
 
 ## Conclusion
 
-The `penguinglyphs` package provides an intuitive way to explore multivariate data through visual encodings that leverage our natural ability to perceive shapes and patterns. It's particularly useful for:
+The `penguinglyphs` package is an experiment in using a glyph that is a schematic picture of the thing that was measured,
+so that the mapping of variables to visual features does not have to be learned.
+It provides a grid display of glyphs for a set of penguins, and glyphs that can be used as the points in any other plot.
 
-- Exploratory data analysis
-- Identifying outliers
-- Communicating patterns to diverse audiences
-- Teaching data visualization concepts
+Some possible uses are:
+
+- Exploratory data analysis, particularly in combination with a dimension-reduction plot
+- Showing what makes multivariate outliers unusual
+- Teaching ideas of visual encoding, and how to evaluate one
+
+Whether such glyphs work better than more abstract ones, like stars or Chernoff faces, remains to be tested.
+
+## References

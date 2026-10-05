@@ -270,6 +270,7 @@ Here are the first five penguins of each species that have complete data, shown 
 ```{r}
 #| label: sample
 peng <- na.omit(penguins)
+rownames(peng) <- NULL
 rows <- unlist(lapply(split(seq_len(nrow(peng)), peng$species), head, n = 5))
 samp <- peng[rows, ]
 samp[, 1:6]

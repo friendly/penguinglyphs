@@ -114,9 +114,12 @@ penguin_legend("topleft", peng$species)
 ### Advanced Examples
 
 ``` r
-# Examine specific outliers
+# Examine specific outliers, among the penguins with complete data.
+# Renumbering the rows gives the same case numbers as in heplots::peng
+peng <- na.omit(penguins)
+rownames(peng) <- NULL
 outliers <- c(10, 35, 283)
-penguin_glyphs(penguins[outliers,], main = "Notable Penguins")
+penguin_glyphs(peng[outliers,], main = "Notable Penguins")
 ```
 
 <img src="man/figures/README-outliers-1.png" alt="" width="90%" />
@@ -124,9 +127,9 @@ penguin_glyphs(penguins[outliers,], main = "Notable Penguins")
 ``` r
 # Create a lineup for visual inference
 set.seed(42)
-cast <- c(sample(1:nrow(penguins), size = 17), outliers)
+cast <- c(sample(1:nrow(peng), size = 17), outliers)
 lineup <- sample(cast, size = length(cast))
-penguin_glyphs(penguins[lineup,], main = "Can you spot the outliers?")
+penguin_glyphs(peng[lineup,], main = "Can you spot the outliers?")
 ```
 
 <img src="man/figures/README-lineup-1.png" alt="" width="90%" />

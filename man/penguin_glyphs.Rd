@@ -86,9 +86,12 @@ set.seed(42)
 sampled_rows <- sample(1:nrow(penguins), size = 20)
 penguin_glyphs(penguins[sampled_rows, ], main = "Random Penguin Glyphs")
 
-# Look at specific outliers
+# Look at specific outliers, among the penguins with complete data.
+# Renumbering the rows gives the same case numbers as in heplots::peng
+peng <- na.omit(penguins)
+rownames(peng) <- NULL
 outliers <- c(10, 35, 283)
-penguin_glyphs(penguins[outliers,], main = "Notable Penguins")
+penguin_glyphs(peng[outliers,], main = "Notable Penguins")
 
 # Custom legend position
 penguin_glyphs(penguins[sampled_rows, ],
