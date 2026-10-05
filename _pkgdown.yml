@@ -1,0 +1,37 @@
+url: https://friendly.github.io/penguinglyphs
+
+template:
+  bootstrap: 5
+  bslib:
+    base_font: {google: "Roboto"}
+    heading_font: {google: "Roboto Slab"}
+    code_font: {google: "JetBrains Mono"}
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+
+articles:
+  - title: Vignettes
+    navbar: ~
+    contents:
+    - introduction
+    - draw
+
+reference:
+  - title: Glyph displays
+    desc: Displays of penguin glyphs for the observations in a dataset
+    contents:
+    - penguin_glyphs
+    - penguin_points
+    - penguin_legend
+
+  - title: Drawing a glyph
+    desc: Drawing a single glyph, and scaling variables for the visual features
+    contents:
+    - draw_penguin
+    - normalize_var
+
+  - title: Data
+    contents:
+    - crime

@@ -32,6 +32,6 @@ Suggests:
     tidyr
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
-URL: https://github.com/friendly/penguinglyphs
+URL: https://friendly.github.io/penguinglyphs/, https://github.com/friendly/penguinglyphs
 BugReports: https://github.com/friendly/penguinglyphs/issues
 Config/roxygen2/version: 8.1.0
