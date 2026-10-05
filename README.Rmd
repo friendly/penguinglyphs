@@ -72,6 +72,12 @@ penguin_glyphs(penguins[sampled_rows, ], main = "Random Sample of Penguins")
 ```
 
 A penguin with missing measurements has those parts of the glyph drawn as dashed outlines.
+If its sex is unknown, the eyes are drawn as pupils only. Here, penguin 4 has no measurements at all,
+and the sex of penguin 9 was not recorded.
+
+```{r missing, fig.height = 2.6}
+penguin_glyphs(penguins[c(2, 4, 6, 9, 14), ], main = "")
+```
 
 ### Drawing Individual Penguins
 

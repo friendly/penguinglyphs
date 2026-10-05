@@ -121,13 +121,16 @@
 <span><span class="va">sampled_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/penguin_glyphs.html">penguin_glyphs</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">[</span><span class="va">sampled_rows</span>, <span class="op">]</span>, main <span class="op">=</span> <span class="st">"Random Sample of Penguins"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-basic-1.png" alt="" width="90%"></p>
-<p>A penguin with missing measurements has those parts of the glyph drawn as dashed outlines.</p>
+<p>A penguin with missing measurements has those parts of the glyph drawn as dashed outlines. If its sex is unknown, the eyes are drawn as pupils only. Here, penguin 4 has no measurements at all, and the sex of penguin 9 was not recorded.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/penguin_glyphs.html">penguin_glyphs</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">14</span><span class="op">)</span>, <span class="op">]</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-missing-1.png" alt="" width="90%"></p>
 </div>
 <div class="section level3">
 <h3 id="drawing-individual-penguins">Drawing Individual Penguins<a class="anchor" aria-label="anchor" href="#drawing-individual-penguins"></a>
 </h3>
 <p><code><a href="reference/draw_penguin.html">draw_penguin()</a></code> draws a single glyph in an existing plot. Its <code>size</code> is the height of the glyph in inches, and <code>cex.lab</code> controls the size of the <code>id</code> label.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create plot area</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">1</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span><span class="op">)</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span><span class="op">)</span>, type<span class="op">=</span><span class="st">"n"</span>, asp<span class="op">=</span><span class="fl">1</span>,</span>
 <span>     xlab<span class="op">=</span><span class="st">""</span>, ylab<span class="op">=</span><span class="st">""</span>, main<span class="op">=</span><span class="st">"Hello, I'm Abby!"</span><span class="op">)</span></span>
@@ -147,7 +150,7 @@
 <h3 id="glyphs-in-other-plots">Glyphs in Other Plots<a class="anchor" aria-label="anchor" href="#glyphs-in-other-plots"></a>
 </h3>
 <p>Because the glyphs are sized in inches, they keep their shape in any plot, like a plotting symbol. <code><a href="reference/penguin_points.html">penguin_points()</a></code> adds a glyph for each row of a data frame to an existing plot, in the manner of <code><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points()</a></code>, and <code><a href="reference/penguin_colors.html">penguin_legend()</a></code> adds a legend for the species.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">peng</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">peng</span> <span class="op">&lt;-</span> <span class="va">peng</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">peng</span><span class="op">)</span>, <span class="fl">40</span><span class="op">)</span>, <span class="op">]</span></span>
@@ -161,7 +164,7 @@
 <div class="section level3">
 <h3 id="advanced-examples">Advanced Examples<a class="anchor" aria-label="anchor" href="#advanced-examples"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Examine specific outliers, among the penguins with complete data.</span></span>
 <span><span class="co"># Renumbering the rows gives the same case numbers as in heplots::peng</span></span>
 <span><span class="va">peng</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></span>
@@ -169,14 +172,14 @@
 <span><span class="va">outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">35</span>, <span class="fl">283</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/penguin_glyphs.html">penguin_glyphs</a></span><span class="op">(</span><span class="va">peng</span><span class="op">[</span><span class="va">outliers</span>,<span class="op">]</span>, main <span class="op">=</span> <span class="st">"Notable Penguins"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-outliers-1.png" alt="" width="90%"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a lineup for visual inference</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">cast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">peng</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">17</span><span class="op">)</span>, <span class="va">outliers</span><span class="op">)</span></span>
 <span><span class="va">lineup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">cast</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cast</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/penguin_glyphs.html">penguin_glyphs</a></span><span class="op">(</span><span class="va">peng</span><span class="op">[</span><span class="va">lineup</span>,<span class="op">]</span>, main <span class="op">=</span> <span class="st">"Can you spot the outliers?"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-lineup-1.png" alt="" width="90%"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Customize legend placement</span></span>
 <span><span class="fu"><a href="reference/penguin_glyphs.html">penguin_glyphs</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">[</span><span class="va">sampled_rows</span>,<span class="op">]</span>,</span>
 <span>               legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>loc <span class="op">=</span> <span class="st">"bottom"</span>, horiz <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
