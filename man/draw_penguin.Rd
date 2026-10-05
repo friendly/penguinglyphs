@@ -14,7 +14,10 @@ draw_penguin(
   species = "Adelie",
   sex = "male",
   id = NULL,
-  base_size = 1
+  size = 0.6,
+  col = penguin_colors(),
+  lwd = 1.5,
+  cex.id = 0.8
 )
 }
 \arguments{
@@ -36,36 +39,64 @@ draw_penguin(
 
 \item{id}{Optional identifier to display in the penguin's body}
 
-\item{base_size}{Base size multiplier for entire glyph (default 1)}
+\item{size}{Height of the glyph in inches, for a penguin with all scale factors
+equal to 1 (default 0.6)}
+
+\item{col}{Named vector of body colors, with species as names. See \code{\link[=penguin_colors]{penguin_colors()}}.}
+
+\item{lwd}{Line width for the glyph outlines}
+
+\item{cex.id}{Character expansion for the \code{id} label}
+}
+\value{
+\code{NULL}, invisibly. Called for its side effect of drawing a glyph.
 }
 \description{
 Draws a schematic penguin at specified coordinates with customizable features
 that represent different measurements. The visual encoding maps:
-\itemize{
-  \item Bill length -> horizontal extent of the bill
-  \item Bill depth -> vertical thickness of the bill
-  \item Flipper length -> length of the flippers
-  \item Body mass -> overall body size
-  \item Species -> body color (Adelie=orange, Chinstrap=purple, Gentoo=green)
-  \item Sex -> eye shape (angular for males, round for females)
-}
 }
 \details{
-This function should be called within an existing plot with appropriate
-coordinates and aspect ratio (asp=1 recommended). It uses base R graphics.
+\itemize{
+\item Bill length -> horizontal extent of the bill
+\item Bill depth -> vertical thickness of the bill
+\item Flipper length -> length of the flippers
+\item Body mass -> overall body size
+\item Species -> body color (Adelie=orange, Chinstrap=purple, Gentoo=green)
+\item Sex -> eye shape (angular for males, round for females)
+}
+
+This function should be called within an existing plot. It uses base R graphics.
+
+The glyph is centered at the data coordinates \verb{(x, y)}, but is sized in inches rather
+than in the units of the axes. It therefore has the same shape and size in any plot,
+whatever the aspect ratio or the ranges of the axes, in the same way as a plotting symbol.
+
+A scale factor that is \code{NA} is drawn at the neutral value of 1, with the corresponding
+part of the glyph shown as an unfilled, dashed outline. If \code{sex} is \code{NA}, the eyes are
+drawn as pupils only.
 }
 \examples{
 # Create a plot area and draw a single penguin
-plot(1, xlim=c(0,2), ylim=c(0,2), type="n", asp=1, 
+plot(1, xlim=c(0,2), ylim=c(0,2), type="n", asp=1,
      xlab="", ylab="", main="Single Penguin")
-draw_penguin(1, 1, bill_len_scale=1.2, body_scale=1.4, 
-             species="Gentoo", sex="female")
+draw_penguin(1, 1, bill_len_scale=1.2, body_scale=1.4,
+             species="Gentoo", sex="female", size = 2)
 
 # Draw multiple penguins with different characteristics
-plot(1, xlim=c(0,4), ylim=c(0,2), type="n", asp=1,
+plot(1, xlim=c(0,4), ylim=c(0,2), type="n",
      xlab="", ylab="", main="Penguin Comparison")
-draw_penguin(1, 1, species="Adelie", sex="male", id="1")
-draw_penguin(2, 1, species="Chinstrap", sex="female", id="2")
-draw_penguin(3, 1, species="Gentoo", sex="male", id="3")
+draw_penguin(1, 1, species="Adelie", sex="male", id="1", size = 1)
+draw_penguin(2, 1, species="Chinstrap", sex="female", id="2", size = 1)
+draw_penguin(3, 1, species="Gentoo", sex="male", id="3", size = 1)
 
+# Missing measurements are shown as dashed outlines
+plot(1, xlim=c(0,3), ylim=c(0,2), type="n",
+     xlab="", ylab="", main="Missing values")
+draw_penguin(1, 1, flipper_scale = NA, size = 1)
+draw_penguin(2, 1, body_scale = NA, sex = NA, size = 1)
+
+}
+\seealso{
+\code{\link[=penguin_points]{penguin_points()}} to add glyphs for the rows of a data frame to a plot;
+\code{\link[=penguin_glyphs]{penguin_glyphs()}} for a grid display.
 }

@@ -4,7 +4,7 @@
 \alias{normalize_var}
 \title{Normalize a variable to a specified range}
 \usage{
-normalize_var(x, new_min = 0.5, new_max = 1.5)
+normalize_var(x, new_min = 0.5, new_max = 1.5, from = NULL)
 }
 \arguments{
 \item{x}{Numeric vector to normalize}
@@ -12,9 +12,14 @@ normalize_var(x, new_min = 0.5, new_max = 1.5)
 \item{new_min}{New minimum value (default 0.5)}
 
 \item{new_max}{New maximum value (default 1.5)}
+
+\item{from}{Range of values mapped onto \verb{[new_min, new_max]}. The default, \code{NULL},
+uses the range of \code{x}. Supply a fixed range to scale different subsets of a
+dataset consistently; values of \code{x} outside it are extrapolated.}
 }
 \value{
-Normalized numeric vector with values scaled to \code{[new_min, new_max]}
+Normalized numeric vector with values scaled to \verb{[new_min, new_max]}.
+Missing values remain \code{NA}.
 }
 \description{
 A utility function for use in creating glyphs for variables, designed for the penguinglyphs package.
@@ -22,4 +27,7 @@ A utility function for use in creating glyphs for variables, designed for the pe
 \examples{
 normalize_var(c(1, 2, 3, 4, 5))
 normalize_var(c(10, 20, 30), new_min = 0, new_max = 1)
+
+# the same values, scaled relative to a wider range
+normalize_var(c(10, 20, 30), new_min = 0, new_max = 1, from = c(0, 100))
 }

@@ -14,11 +14,13 @@ penguin_glyphs(
   sex = "sex",
   ncol = 5,
   main = "Penguin Glyphs",
-  legend = list(loc = "topleft", horiz = TRUE)
+  legend = list(loc = "topleft", horiz = FALSE),
+  ref = NULL,
+  col = penguin_colors()
 )
 }
 \arguments{
-\item{data}{Data frame with penguin measurements (typically from palmerpenguins package)}
+\item{data}{Data frame with penguin measurements (typically \link[datasets:penguins]{datasets::penguins})}
 
 \item{bill_len}{Column name for bill length (default "bill_len")}
 
@@ -36,9 +38,17 @@ penguin_glyphs(
 
 \item{main}{Plot title (default "Penguin Glyphs")}
 
-\item{legend}{List with legend parameters: \code{loc} for location 
+\item{legend}{List with legend parameters: \code{loc} for location
 (e.g., "topleft", "bottom") and \code{horiz} for horizontal layout (TRUE/FALSE).
-Default is \code{list(loc = "topleft", horiz = TRUE)}}
+Default is \code{list(loc = "topleft", horiz = FALSE)}}
+
+\item{ref}{Reference data frame, whose ranges of the measurement variables determine
+how they are scaled. With the default, \code{NULL}, the ranges are those of the full
+\link[datasets:penguins]{datasets::penguins} data, so that a given penguin is drawn the same way in any subset.
+A variable not found there is scaled by its range in \code{data}. Use \code{ref = data} to
+scale all variables relative to the rows being plotted.}
+
+\item{col}{Named vector of body colors, with species as names. See \code{\link[=penguin_colors]{penguin_colors()}}.}
 }
 \value{
 NULL (creates a plot)
@@ -49,30 +59,33 @@ measurements to appropriate visual ranges. This function creates a complete
 plot with legend showing the mapping between data and visual features.
 }
 \details{
-The function automatically normalizes all continuous variables to a 
-scale of 0.7 to 1.3 to ensure visual differences are apparent but not extreme.
+Each continuous variable is normalized to a scale of 0.7 to 1.3, relative
+to its range in \code{ref}, to ensure visual differences are apparent but not extreme.
 Row names from the data frame are displayed as IDs within each penguin glyph.
+Missing values are shown as described in \code{\link[=draw_penguin]{draw_penguin()}}.
 }
 \examples{
-\dontrun{
-# Load the penguins dataset (requires palmerpenguins or datasets package)
+# Load the penguins dataset
 data(penguins, package = "datasets")
 
-# Visualize first 20 penguins
-penguin_glyphs(head(penguins, 20), main = "Palmer Penguins")
+# Visualize first 5 penguins in each species
+which <- outer(1:5, c(0, 152, 277), FUN ="+") |> c()
+penguin_glyphs(penguins[which,])
 
 # Sample random penguins
 set.seed(42)
 sampled_rows <- sample(1:nrow(penguins), size = 20)
-penguin_glyphs(penguins[sampled_rows, ], main = "Random Sample")
+penguin_glyphs(penguins[sampled_rows, ], main = "Random Penguin Glyphs")
 
 # Look at specific outliers
 outliers <- c(10, 35, 283)
 penguin_glyphs(penguins[outliers,], main = "Notable Penguins")
 
 # Custom legend position
-penguin_glyphs(penguins[sampled_rows, ], 
+penguin_glyphs(penguins[sampled_rows, ],
                legend = list(loc = "bottom", horiz = FALSE))
-}
 
+}
+\seealso{
+\code{\link[=penguin_points]{penguin_points()}} to use the glyphs as point symbols in another plot
 }

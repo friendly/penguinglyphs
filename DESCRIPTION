@@ -1,8 +1,8 @@
 Package: penguinglyphs
 Type: Package
 Title: Multivariate Penguin Data Visualization Using Glyphs
-Version: 0.3.0
-Date: 2025-10-10
+Version: 0.4.0
+Date: 2026-10-05
 Authors@R: c(
   person(given = "Michael", family = "Friendly", 
          role=c("aut", "cre"), email="friendly@yorku.ca",
@@ -18,6 +18,10 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
     R (>= 3.5.0)
+Imports:
+    graphics,
+    stats,
+    utils
 Suggests:
     datasets,
     knitr,
@@ -26,7 +30,8 @@ Suggests:
     aplpack,
     dplyr,
     tidyr
-RoxygenNote: 7.3.3
+Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
-URL: https://github.com/yourusername/penguinglyphs
-BugReports: https://github.com/yourusername/penguinglyphs/issues
+URL: https://github.com/friendly/penguinglyphs
+BugReports: https://github.com/friendly/penguinglyphs/issues
+Config/roxygen2/version: 8.1.0

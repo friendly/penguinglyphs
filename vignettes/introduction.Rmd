@@ -2,7 +2,7 @@
 title: "Introduction to penguinglyphs"
 output: 
   rmarkdown::html_vignette:
-  fig_caption: yes
+    fig_caption: yes
 bibliography: ["references.bib"]
 csl: apa.csl
 vignette: >
@@ -81,7 +81,7 @@ which <- outer(1:5, c(0, 152, 277), FUN ="+") |> c()
 penguin_glyphs(penguins[which,])
 ```
 
-What happened with case 4? It contains missing missing `NA` values, so no glyph is drawn.
+What happened with case 4? It contains missing `NA` values, so the glyph is drawn only as a dashed outline.
 Henceforth, I'll work with the subset that contains no missing values
 
 ```{r}
@@ -106,10 +106,10 @@ For more control, you can draw individual penguins with `draw_penguin()`:
 plot(1, xlim=c(0,4), ylim=c(0,2), type="n", asp=1,
      xlab="", ylab="", main="Species Comparison")
 
-# Draw one of each species
-draw_penguin(1, 1, species="Adelie", sex="male", id="Adelie")
-draw_penguin(2, 1, species="Chinstrap", sex="female", id="Chinstrap")
-draw_penguin(3, 1, species="Gentoo", sex="male", id="Gentoo")
+# Draw one of each species; size is the height of the glyph, in inches
+draw_penguin(1, 1, species="Adelie", sex="male", id="Adelie", size = 1.5)
+draw_penguin(2, 1, species="Chinstrap", sex="female", id="Chinstrap", size = 1.5)
+draw_penguin(3, 1, species="Gentoo", sex="male", id="Gentoo", size = 1.5)
 ```
 
 ## Finding Patterns
@@ -133,7 +133,7 @@ distribution for four variables.
 clr <- c(Adelie = "#F37A00", Chinstrap = "#6A3D9A", Gentoo = "#33a02c")
 pch <- c(19, 17, 15)   # ggplot symbol defaults for a factor
 
-out <- heplots::cqplot(peng[, 3:6], 
+out <- heplots::cqplot(penguins[, 3:6], 
    id.n = 3,
    col = clr[penguins$species],
    pch = pch[penguins$species],
@@ -152,7 +152,7 @@ penguin_glyphs(penguins[outliers,], ncol=3, main = "Notable Penguins")
 ### Visual Lineup
 
 A "line-up" test [@Buja-etal2009]
-has been proposed as a **human significance test*: Can an observer spot a difference that rejects a null hypothesis?
+has been proposed as a **human significance test**: Can an observer spot a difference that rejects a null hypothesis?
 This is more a test of a data visualization per se than of the human observer. 
 
 
