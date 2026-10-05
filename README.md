@@ -8,7 +8,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 commit](https://img.shields.io/github/last-commit/friendly/penguinglyphs/master)
 <!-- badges: end -->
 
-# penguinglyphs <img src="man/figures/logo.svg" height="200" style="float:right; height:200px;"/>
+# penguinglyphs <img src="man/figures/logo.png" height="200" style="float:right; height:200px;"/>
 
 An experiment in visualizing multivariate penguin data as schematic
 penguin drawings. Physical measurements are mapped to visual features of
