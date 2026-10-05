@@ -6,6 +6,7 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 ![GitHub last
 commit](https://img.shields.io/github/last-commit/friendly/penguinglyphs/master)
+[![Docs](https://img.shields.io/badge/pkgdown%20site-blue)](https://friendly.github.io/penguinglyphs/)
 <!-- badges: end -->
 
 # penguinglyphs <img src="man/figures/logo.png" height="200" style="float:right; height:200px;"/>
@@ -136,7 +137,7 @@ penguin_glyphs(peng[lineup,], main = "Can you spot the outliers?")
 
 ``` r
 # Customize legend placement
-penguin_glyphs(penguins[1:20,],
+penguin_glyphs(penguins[sampled_rows,],
                legend = list(loc = "bottom", horiz = FALSE))
 ```
 
@@ -170,8 +171,10 @@ clusters, and relationships that might be hidden in traditional plots.
 
 This package is designed to work with what was originally the [Palmer
 Penguins](https://allisonhorst.github.io/palmerpenguins/) dataset, but
-now (R 4.5.0) in `datasets::penguins`, a popular alternative to the iris
-dataset for data exploration and visualization examples.
+now (R 4.5.0) in `datasets::penguins`, and in `heplots::peng` (which
+omits the NAs). This dataset is a popular alternative to the
+`datasets::iris` dataset for data exploration and visualization
+examples.
 
 ## License
 

@@ -111,7 +111,7 @@
 </h3>
 <p><code><a href="reference/penguin_glyphs.html">penguin_glyphs()</a></code> draws the penguins in a data frame as a grid of glyphs, labeled by their row names.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://friendly.github.io/penguinglyphs/">penguinglyphs</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/friendly/penguinglyphs" class="external-link">penguinglyphs</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load penguin data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">penguins</span>, package <span class="op">=</span> <span class="st">"datasets"</span><span class="op">)</span></span>
@@ -178,7 +178,7 @@
 <p><img src="reference/figures/README-lineup-1.png" alt="" width="90%"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Customize legend placement</span></span>
-<span><span class="fu"><a href="reference/penguin_glyphs.html">penguin_glyphs</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span>,<span class="op">]</span>,</span>
+<span><span class="fu"><a href="reference/penguin_glyphs.html">penguin_glyphs</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">[</span><span class="va">sampled_rows</span>,<span class="op">]</span>,</span>
 <span>               legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>loc <span class="op">=</span> <span class="st">"bottom"</span>, horiz <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-legend-1.png" alt="" width="90%"></p>
 </div>
@@ -208,7 +208,7 @@
 <div class="section level2">
 <h2 id="related">Related<a class="anchor" aria-label="anchor" href="#related"></a>
 </h2>
-<p>This package is designed to work with what was originally the <a href="https://allisonhorst.github.io/palmerpenguins/" class="external-link">Palmer Penguins</a> dataset, but now (R 4.5.0) in <code><a href="https://rdrr.io/r/datasets/penguins.html" class="external-link">datasets::penguins</a></code>, a popular alternative to the iris dataset for data exploration and visualization examples.</p>
+<p>This package is designed to work with what was originally the <a href="https://allisonhorst.github.io/palmerpenguins/" class="external-link">Palmer Penguins</a> dataset, but now (R 4.5.0) in <code><a href="https://rdrr.io/r/datasets/penguins.html" class="external-link">datasets::penguins</a></code>, and in <code><a href="https://friendly.github.io/heplots/reference/peng.html" class="external-link">heplots::peng</a></code> (which omits the NAs). This dataset is a popular alternative to the <code><a href="https://rdrr.io/r/datasets/iris.html" class="external-link">datasets::iris</a></code> dataset for data exploration and visualization examples.</p>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
@@ -253,6 +253,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://friendly.github.io/penguinglyphs/"><img src="https://img.shields.io/badge/pkgdown%20site-blue" alt="Docs"></a></li>
 </ul>
 </div>
 
