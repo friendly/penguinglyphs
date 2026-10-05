@@ -4,18 +4,22 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-![GitHub last
-commit](https://img.shields.io/github/last-commit/friendly/penguinglyphs/master)
+[![Version](https://img.shields.io/github/r-package/v/friendly/penguinglyphs?label=version)](https://github.com/friendly/penguinglyphs/blob/master/NEWS.md)
+[![Last
+Commit](https://img.shields.io/github/last-commit/friendly/penguinglyphs)](https://github.com/friendly/penguinglyphs/)
 [![Docs](https://img.shields.io/badge/pkgdown%20site-blue)](https://friendly.github.io/penguinglyphs/)
 <!-- badges: end -->
 
 # penguinglyphs <img src="man/figures/logo.png" height="200" style="float:right; height:200px;"/>
 
-An experiment in visualizing multivariate penguin data as schematic
-penguin drawings. Physical measurements are mapped to visual features of
-penguin glyphs, making patterns in the data immediately apparent. Or do
-they? Designed to test some ideas in using glyphs to represent
-multivariate data, in a novel context.
+This package is an experiment in visualizing multivariate penguin data
+as schematic penguin drawings. Physical measurements are mapped to
+visual features of penguin glyphs, making patterns in the data
+immediately apparent. Or do they?
+
+It is designed to test some ideas in using glyphs to represent
+multivariate data, in a novel context, just to see what works, for what
+purpose.
 
 ## Installation
 
@@ -146,7 +150,7 @@ penguin_glyphs(peng[lineup,], main = "Can you spot the outliers?")
 ``` r
 # Customize legend placement
 penguin_glyphs(penguins[sampled_rows,],
-               legend = list(loc = "bottom", horiz = FALSE))
+               legend = list(loc = "bottom", horiz = TRUE))
 ```
 
 <img src="man/figures/README-legend-1.png" alt="" width="90%" />
