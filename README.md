@@ -54,14 +54,15 @@ penguin_glyphs(penguins[sampled_rows, ], main = "Random Sample of Penguins")
 ```r
 # Create plot area
 plot(1, xlim=c(0,2), ylim=c(0,2), type="n", asp=1, 
-     xlab="", ylab="", main="Custom Penguin")
+     xlab="", ylab="", main="Hello, I'm Abby!")
 
 # Draw a penguin with custom characteristics
 draw_penguin(1, 1, 
              bill_len_scale = 1.2, 
              body_scale = 1.4, 
              species = "Gentoo", 
-             sex = "female")
+             sex = "female",
+             id = "Abby")
 ```
 
 ### Advanced Examples
