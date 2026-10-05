@@ -16,7 +16,8 @@ penguin_glyphs(
   main = "Penguin Glyphs",
   legend = list(loc = "topleft", horiz = FALSE),
   ref = NULL,
-  col = penguin_colors()
+  col = penguin_colors(),
+  cex.lab = 1
 )
 }
 \arguments{
@@ -38,8 +39,9 @@ penguin_glyphs(
 
 \item{main}{Plot title (default "Penguin Glyphs")}
 
-\item{legend}{List with legend parameters: \code{loc} for location
-(e.g., "topleft", "bottom") and \code{horiz} for horizontal layout (TRUE/FALSE).
+\item{legend}{List with legend parameters: \code{loc} for location, one of the keywords
+"topleft", "top", "topright", "left", "right", "bottomleft", "bottom" or "bottomright",
+and \code{horiz} for horizontal layout (TRUE/FALSE).
 Default is \code{list(loc = "topleft", horiz = FALSE)}}
 
 \item{ref}{Reference data frame, whose ranges of the measurement variables determine
@@ -49,6 +51,8 @@ A variable not found there is scaled by its range in \code{data}. Use \code{ref 
 scale all variables relative to the rows being plotted.}
 
 \item{col}{Named vector of body colors, with species as names. See \code{\link[=penguin_colors]{penguin_colors()}}.}
+
+\item{cex.lab}{Character expansion for the ID labels in the glyphs (default 1)}
 }
 \value{
 NULL (creates a plot)
@@ -63,6 +67,11 @@ Each continuous variable is normalized to a scale of 0.7 to 1.3, relative
 to its range in \code{ref}, to ensure visual differences are apparent but not extreme.
 Row names from the data frame are displayed as IDs within each penguin glyph.
 Missing values are shown as described in \code{\link[=draw_penguin]{draw_penguin()}}.
+
+The legend is placed outside the grid of glyphs, on the side given by \code{legend$loc}.
+The grid cells are square, so there is usually spare room either beside the grid or
+above and below it. For a corner position such as "topleft", the legend goes beside
+or above the grid, whichever leaves more room for the glyphs.
 }
 \examples{
 # Load the penguins dataset

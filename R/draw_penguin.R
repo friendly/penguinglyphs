@@ -23,7 +23,7 @@
 #'   equal to 1 (default 0.6)
 #' @param col Named vector of body colors, with species as names. See [penguin_colors()].
 #' @param lwd Line width for the glyph outlines
-#' @param cex.id Character expansion for the `id` label
+#' @param cex.lab Character expansion for the `id` label (default 0.8)
 #' @importFrom graphics grconvertX grconvertY polygon segments text
 #'
 #' @details This function should be called within an existing plot. It uses base R graphics.
@@ -45,7 +45,8 @@
 #' plot(1, xlim=c(0,2), ylim=c(0,2), type="n", asp=1,
 #'      xlab="", ylab="", main="Single Penguin")
 #' draw_penguin(1, 1, bill_len_scale=1.2, body_scale=1.4,
-#'              species="Gentoo", sex="female", size = 2)
+#'              species="Gentoo", sex="female", size = 2,
+#'              id = "Abby", cex.lab = 1.5)
 #'
 #' # Draw multiple penguins with different characteristics
 #' plot(1, xlim=c(0,4), ylim=c(0,2), type="n",
@@ -72,7 +73,7 @@ draw_penguin <- function(x, y,
                          size = 0.6,
                          col = penguin_colors(),
                          lwd = 1.5,
-                         cex.id = 0.8) {
+                         cex.lab = 0.8) {
 
   if (is.na(x) || is.na(y)) return(invisible(NULL))
 
@@ -176,7 +177,7 @@ draw_penguin <- function(x, y,
   }
 
   # Label the glyph with id
-  if (!is.null(id)) text(x, y, labels = id, cex = cex.id)
+  if (!is.null(id)) text(x, y, labels = id, cex = cex.lab)
 
   invisible(NULL)
 }

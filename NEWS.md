@@ -8,6 +8,7 @@
 * New `penguin_points()` adds glyphs for the rows of a data frame to an existing plot, in the manner of `points()`.
 * New `penguin_legend()` adds a species legend, and `penguin_colors()` gives the default species colors.
   Colors can be changed with the new `col` argument of the plotting functions.
+* New `cex.lab` argument of `draw_penguin()`, `penguin_points()` and `penguin_glyphs()` controls the size of the `id` labels.
 
 ## Bug fixes
 
@@ -18,6 +19,8 @@
   of `penguin_glyphs()` and `penguin_points()` controls this; `ref = data` gives the old behavior.
 * Missing values are now visible: a missing measurement is drawn as an unfilled, dashed outline of that part
   of the glyph, and a penguin of unknown sex has pupils but no eye outlines (it was drawn as a male).
+* The legend in `penguin_glyphs()` no longer overlaps the glyphs. It is placed outside the grid, beside or
+  above/below it, using the spare room around the grid where there is some.
 * `penguin_glyphs()` restores the graphics parameters it changes.
 * `normalize_var()` gains a `from` argument giving the range to scale from, and returns `NA` rather than 1 
   for a variable that is entirely missing.

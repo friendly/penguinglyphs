@@ -17,7 +17,7 @@ draw_penguin(
   size = 0.6,
   col = penguin_colors(),
   lwd = 1.5,
-  cex.id = 0.8
+  cex.lab = 0.8
 )
 }
 \arguments{
@@ -46,7 +46,7 @@ equal to 1 (default 0.6)}
 
 \item{lwd}{Line width for the glyph outlines}
 
-\item{cex.id}{Character expansion for the \code{id} label}
+\item{cex.lab}{Character expansion for the \code{id} label (default 0.8)}
 }
 \value{
 \code{NULL}, invisibly. Called for its side effect of drawing a glyph.
@@ -80,7 +80,8 @@ drawn as pupils only.
 plot(1, xlim=c(0,2), ylim=c(0,2), type="n", asp=1,
      xlab="", ylab="", main="Single Penguin")
 draw_penguin(1, 1, bill_len_scale=1.2, body_scale=1.4,
-             species="Gentoo", sex="female", size = 2)
+             species="Gentoo", sex="female", size = 2,
+             id = "Abby", cex.lab = 1.5)
 
 # Draw multiple penguins with different characteristics
 plot(1, xlim=c(0,4), ylim=c(0,2), type="n",

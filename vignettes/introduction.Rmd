@@ -173,12 +173,13 @@ penguin_glyphs(penguins[lineup,], main = "Can you spot the outliers?")
 
 ### Legend Placement
 
-In the current version, legend placement doesn't work all that well, but you can try to modify it.
+The legend is placed outside the grid of glyphs, at the top left by default. You can put it on another side,
+or lay it out horizontally.
 
 ```{r fig.width=8, fig.height=6}
 penguin_glyphs(penguins[sampled_rows, ], 
                main = "Custom Legend",
-               legend = list(loc = "bottom", horiz = FALSE))
+               legend = list(loc = "bottom", horiz = TRUE))
 ```
 
 ### Different Grid Layouts

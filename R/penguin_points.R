@@ -23,7 +23,8 @@
 #' @param id Labels to display in the bodies of the glyphs: `TRUE` to use the row names
 #'   of `data`, or a vector of labels. The default, `FALSE`, gives no labels.
 #' @param col Named vector of body colors, with species as names. See [penguin_colors()].
-#' @param ... Other arguments passed to [draw_penguin()], such as `lwd` and `cex.id`
+#' @param cex.lab Character expansion for the `id` labels (default 0.8)
+#' @param ... Other arguments passed to [draw_penguin()], such as `lwd`
 #'
 #' @details Each continuous variable is normalized to a scale of 0.7 to 1.3, relative to
 #' its range in `ref`. Rows with a missing `x` or `y` are not drawn. Other missing
@@ -63,6 +64,7 @@ penguin_points <- function(x, y, data,
                            size = 0.4,
                            id = FALSE,
                            col = penguin_colors(),
+                           cex.lab = 0.8,
                            ...) {
 
   n <- nrow(data)
@@ -89,6 +91,7 @@ penguin_points <- function(x, y, data,
       id = id[i],
       size = size,
       col = col,
+      cex.lab = cex.lab,
       ...
     )
   }

@@ -10,8 +10,12 @@ importFrom(graphics,
   grconvertX,
   grconvertY,
   par,
-  plot,
+  plot.new,
+  plot.window,
   polygon,
   segments,
-  text
+  text,
+  title,
+  xinch,
+  yinch
 )

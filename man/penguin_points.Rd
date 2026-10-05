@@ -18,6 +18,7 @@ penguin_points(
   size = 0.4,
   id = FALSE,
   col = penguin_colors(),
+  cex.lab = 0.8,
   ...
 )
 }
@@ -53,7 +54,9 @@ of \code{data}, or a vector of labels. The default, \code{FALSE}, gives no label
 
 \item{col}{Named vector of body colors, with species as names. See \code{\link[=penguin_colors]{penguin_colors()}}.}
 
-\item{...}{Other arguments passed to \code{\link[=draw_penguin]{draw_penguin()}}, such as \code{lwd} and \code{cex.id}}
+\item{cex.lab}{Character expansion for the \code{id} labels (default 0.8)}
+
+\item{...}{Other arguments passed to \code{\link[=draw_penguin]{draw_penguin()}}, such as \code{lwd}}
 }
 \value{
 \code{NULL}, invisibly. Called for its side effect of adding glyphs to a plot.
