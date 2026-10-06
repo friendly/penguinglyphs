@@ -104,7 +104,7 @@ drawing a penguin observation using R graphics like
 <code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"friendly/penguinglyphs"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://friendly.github.io/penguinglyphs/">penguinglyphs</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/friendly/penguinglyphs" class="external-link">penguinglyphs</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="visual-encoding">Visual Encoding<a class="anchor" aria-label="anchor" href="#visual-encoding"></a>
@@ -217,38 +217,68 @@ plotting symbol. <code><a href="../reference/penguin_points.html">penguin_points
 for each row of a data frame at given coordinates in an existing plot,
 as <code><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points()</a></code> does for ordinary symbols.
 <code><a href="../reference/penguin_colors.html">penguin_legend()</a></code> adds a legend for the species.</p>
+<p>These plots are drawn with the <a href="https://grantmcdermott.com/tinyplot/" class="external-link">tinyplot</a> package, a
+lightweight extension of base R graphics that makes it easy to plot data
+by groups. Because it uses base graphics, penguin glyphs can be added to
+a <code><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">tinyplot()</a></code> just as they can to a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>. In
+particular, it can draw a data ellipse for each species, to give a
+summary of the data that the glyphs can be seen against. I use 68%
+ellipses, lightly filled with a transparent version of the species
+color, the bivariate analog of a mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>±</mo><annotation encoding="application/x-tex">\pm</annotation></semantics></math>
+one standard deviation interval.</p>
 <p>Here, the glyphs for a sample of 40 penguins are the points in a
 scatterplot of body mass against flipper length. The glyphs repeat what
 the axes show, in that penguins toward the right have longer flippers
 and those toward the top have larger bodies, but they also show the bill
 and the sex of each penguin.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grantmcdermott.com/tinyplot/" class="external-link">tinyplot</a></span><span class="op">)</span></span>
+<span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="../reference/penguin_colors.html">penguin_colors</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">show</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">peng</span><span class="op">)</span>, <span class="fl">40</span><span class="op">)</span></span>
 <span><span class="va">samp</span> <span class="op">&lt;-</span> <span class="va">peng</span><span class="op">[</span><span class="va">show</span>, <span class="op">]</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">body_mass</span> <span class="op">~</span> <span class="va">flipper_len</span>, data <span class="op">=</span> <span class="va">samp</span>, type <span class="op">=</span> <span class="st">"n"</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Flipper length (mm)"</span>, ylab <span class="op">=</span> <span class="st">"Body mass (g)"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">tinyplot</a></span><span class="op">(</span><span class="va">body_mass</span> <span class="op">~</span> <span class="va">flipper_len</span> <span class="op">|</span> <span class="va">species</span>, data <span class="op">=</span> <span class="va">samp</span>,</span>
+<span>         type <span class="op">=</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/type_ellipse.html" class="external-link">type_ellipse</a></span><span class="op">(</span>level <span class="op">=</span> <span class="fl">0.68</span><span class="op">)</span>,</span>
+<span>         col <span class="op">=</span> <span class="va">cols</span>, lwd <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>         bg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html" class="external-link">adjustcolor</a></span><span class="op">(</span><span class="va">cols</span>, alpha.f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>,</span>
+<span>         legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>         xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/extendrange.html" class="external-link">extendrange</a></span><span class="op">(</span><span class="va">samp</span><span class="op">$</span><span class="va">flipper_len</span>, f <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,   <span class="co"># room for the glyphs</span></span>
+<span>         ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/extendrange.html" class="external-link">extendrange</a></span><span class="op">(</span><span class="va">samp</span><span class="op">$</span><span class="va">body_mass</span>, f <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,</span>
+<span>         xlab <span class="op">=</span> <span class="st">"Flipper length (mm)"</span>, ylab <span class="op">=</span> <span class="st">"Body mass (g)"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/penguin_points.html">penguin_points</a></span><span class="op">(</span><span class="va">samp</span><span class="op">$</span><span class="va">flipper_len</span>, <span class="va">samp</span><span class="op">$</span><span class="va">body_mass</span>, <span class="va">samp</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/penguin_colors.html">penguin_legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, <span class="va">samp</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="introduction_files/figure-html/fig-scatter-1.png" class="r-plt" alt="Penguin glyphs as the point symbols in a scatterplot" width="768"><p class="caption">
-Penguin glyphs as the point symbols in a scatterplot
+<img src="introduction_files/figure-html/fig-scatter-1.png" class="r-plt" alt="Penguin glyphs as the point symbols in a scatterplot, with 68% data ellipses for the species" width="768"><p class="caption">
+Penguin glyphs as the point symbols in a scatterplot, with 68% data
+ellipses for the species
 </p>
 </div>
 <p>The coordinates need not be variables in the data. A more useful
 display puts the glyphs in the space of the first two principal
 components, so that position summarizes all four measurements, and the
-glyph shows what lies behind it.</p>
+glyph shows what lies behind it. In this plot, the ellipses are
+calculated from all the penguins, and the glyphs are those for the
+sample.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">prcomp</a></span><span class="op">(</span><span class="va">peng</span><span class="op">[</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, scale. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">pca</span><span class="op">$</span><span class="va">x</span>, species <span class="op">=</span> <span class="va">peng</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pca</span><span class="op">$</span><span class="va">x</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, type <span class="op">=</span> <span class="st">"n"</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/penguin_points.html">penguin_points</a></span><span class="op">(</span><span class="va">pca</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="va">show</span>, <span class="fl">1</span><span class="op">]</span>, <span class="va">pca</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="va">show</span>, <span class="fl">2</span><span class="op">]</span>, <span class="va">samp</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/penguin_colors.html">penguin_legend</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="va">samp</span><span class="op">$</span><span class="va">species</span>, horiz <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">tinyplot</a></span><span class="op">(</span><span class="va">PC2</span> <span class="op">~</span> <span class="va">PC1</span> <span class="op">|</span> <span class="va">species</span>, data <span class="op">=</span> <span class="va">scores</span>,</span>
+<span>         type <span class="op">=</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/type_ellipse.html" class="external-link">type_ellipse</a></span><span class="op">(</span>level <span class="op">=</span> <span class="fl">0.68</span><span class="op">)</span>,</span>
+<span>         col <span class="op">=</span> <span class="va">cols</span>, lwd <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>         bg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html" class="external-link">adjustcolor</a></span><span class="op">(</span><span class="va">cols</span>, alpha.f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>,</span>
+<span>         legend <span class="op">=</span> <span class="cn">FALSE</span>, asp <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>         xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/extendrange.html" class="external-link">extendrange</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">PC1</span>, f <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,</span>
+<span>         ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/extendrange.html" class="external-link">extendrange</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">PC2</span>, f <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/penguin_points.html">penguin_points</a></span><span class="op">(</span><span class="va">scores</span><span class="op">$</span><span class="va">PC1</span><span class="op">[</span><span class="va">show</span><span class="op">]</span>, <span class="va">scores</span><span class="op">$</span><span class="va">PC2</span><span class="op">[</span><span class="va">show</span><span class="op">]</span>, <span class="va">samp</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/penguin_colors.html">penguin_legend</a></span><span class="op">(</span><span class="st">"bottomleft"</span>, <span class="va">samp</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="introduction_files/figure-html/fig-pca-1.png" class="r-plt" alt="Penguin glyphs in the space of the first two principal components" width="768"><p class="caption">
-Penguin glyphs in the space of the first two principal components
+<img src="introduction_files/figure-html/fig-pca-1.png" class="r-plt" alt="Penguin glyphs in the space of the first two principal components, with 68% data ellipses for the species" width="768"><p class="caption">
+Penguin glyphs in the space of the first two principal components, with
+68% data ellipses for the species
 </p>
 </div>
 </div>
@@ -316,24 +346,31 @@ components, all three are on the periphery: penguins 283 and 10 are at
 opposite ends of the third dimension, and 35 is at the top of the
 fourth.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tpar.html" class="external-link">tpar</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">dims</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pca</span><span class="op">$</span><span class="va">x</span><span class="op">[</span>, <span class="va">dims</span><span class="op">]</span>, asp <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.7</span>,</span>
-<span>       xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/extendrange.html" class="external-link">extendrange</a></span><span class="op">(</span><span class="va">pca</span><span class="op">$</span><span class="va">x</span><span class="op">[</span>, <span class="va">dims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>,   <span class="co"># room for the glyphs</span></span>
-<span>       col <span class="op">=</span> <span class="fu"><a href="../reference/penguin_colors.html">penguin_colors</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">peng</span><span class="op">$</span><span class="va">species</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>       main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Dimensions"</span>, <span class="va">dims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"and"</span>, <span class="va">dims</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="../reference/penguin_points.html">penguin_points</a></span><span class="op">(</span><span class="va">pca</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="va">outliers</span>, <span class="va">dims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">pca</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="va">outliers</span>, <span class="va">dims</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="va">peng</span><span class="op">[</span><span class="va">outliers</span>, <span class="op">]</span>,</span>
+<span>  <span class="va">pc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"PC"</span>, <span class="va">dims</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot.html" class="external-link">tinyplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/delete.response.html" class="external-link">reformulate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">pc</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"| species"</span><span class="op">)</span>, response <span class="op">=</span> <span class="va">pc</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">scores</span>,</span>
+<span>           pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>           col <span class="op">=</span> <span class="va">cols</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, asp <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>           xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/extendrange.html" class="external-link">extendrange</a></span><span class="op">(</span><span class="va">scores</span><span class="op">[[</span><span class="va">pc</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>, f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>,   <span class="co"># room for the glyphs</span></span>
+<span>           main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Dimensions"</span>, <span class="va">dims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"and"</span>, <span class="va">dims</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tinyplot_add.html" class="external-link">tinyplot_add</a></span><span class="op">(</span>type <span class="op">=</span> <span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/type_ellipse.html" class="external-link">type_ellipse</a></span><span class="op">(</span>level <span class="op">=</span> <span class="fl">0.68</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">1.5</span>, </span>
+<span>               bg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html" class="external-link">adjustcolor</a></span><span class="op">(</span><span class="va">cols</span>, alpha.f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/penguin_points.html">penguin_points</a></span><span class="op">(</span><span class="va">scores</span><span class="op">[</span><span class="va">outliers</span>, <span class="va">pc</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">scores</span><span class="op">[</span><span class="va">outliers</span>, <span class="va">pc</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="va">peng</span><span class="op">[</span><span class="va">outliers</span>, <span class="op">]</span>,</span>
 <span>                 size <span class="op">=</span> <span class="fl">0.7</span>, id <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="../reference/penguin_colors.html">penguin_legend</a></span><span class="op">(</span><span class="st">"bottomright"</span>, <span class="va">peng</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="introduction_files/figure-html/fig-pca-outliers-1.png" class="r-plt" alt="The three most unusual penguins, shown as glyphs in plots of the first two principal components (left) and the last two (right)." width="960"><p class="caption">
+<img src="introduction_files/figure-html/fig-pca-outliers-1.png" class="r-plt" alt="The three most unusual penguins, shown as glyphs in plots of the first two principal components (left) and the last two (right), with 68% data ellipses for the species." width="960"><p class="caption">
 The three most unusual penguins, shown as glyphs in plots of the first
-two principal components (left) and the last two (right).
+two principal components (left) and the last two (right), with 68% data
+ellipses for the species.
 </p>
 </div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://grantmcdermott.com/tinyplot/man/tpar.html" class="external-link">tpar</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></code></pre></div>
+<p>In the last two dimensions the species largely coincide, and the
+outliers are far outside all three ellipses.</p>
 </div>
 <div class="section level3">
 <h3 id="visual-lineup">Visual Lineup<a class="anchor" aria-label="anchor" href="#visual-lineup"></a>

@@ -131,6 +131,12 @@ in the same way as a plotting symbol.
 `penguin_points()` uses this to add a glyph for each row of a data frame at given coordinates in an existing plot,
 as `points()` does for ordinary symbols. `penguin_legend()` adds a legend for the species.
 
+These plots are drawn with the [tinyplot](https://grantmcdermott.com/tinyplot/) package, a lightweight extension of base R graphics
+that makes it easy to plot data by groups. Because it uses base graphics, penguin glyphs can be added to a `tinyplot()`
+just as they can to a `plot()`. In particular, it can draw a data ellipse for each species, to give a summary
+of the data that the glyphs can be seen against. I use 68% ellipses, lightly filled with a transparent version of the species color, the bivariate analog of a
+mean $\pm$ one standard deviation interval.
+
 Here, the glyphs for a sample of 40 penguins are the points in a scatterplot of body mass against flipper length.
 The glyphs repeat what the axes show, in that penguins toward the right have longer flippers and those toward the top have
 larger bodies, but they also show the bill and the sex of each penguin.
@@ -139,31 +145,47 @@ larger bodies, but they also show the bill and the sex of each penguin.
 #| label: fig-scatter
 #| fig-width: 8
 #| fig-height: 6
-#| fig-cap: Penguin glyphs as the point symbols in a scatterplot
+#| fig-cap: Penguin glyphs as the point symbols in a scatterplot, with 68% data ellipses for the species
+library(tinyplot)
+cols <- unname(penguin_colors())
+
 set.seed(42)
 show <- sample(nrow(peng), 40)
 samp <- peng[show, ]
 
-plot(body_mass ~ flipper_len, data = samp, type = "n",
-     xlab = "Flipper length (mm)", ylab = "Body mass (g)")
+tinyplot(body_mass ~ flipper_len | species, data = samp,
+         type = type_ellipse(level = 0.68),
+         col = cols, lwd = 1.5,
+         bg = adjustcolor(cols, alpha.f = 0.15),
+         legend = FALSE,
+         xlim = extendrange(samp$flipper_len, f = 0.1),   # room for the glyphs
+         ylim = extendrange(samp$body_mass, f = 0.1),
+         xlab = "Flipper length (mm)", ylab = "Body mass (g)")
 penguin_points(samp$flipper_len, samp$body_mass, samp)
 penguin_legend("topleft", samp$species)
 ```
 
 The coordinates need not be variables in the data. A more useful display puts the glyphs in the space
 of the first two principal components, so that position summarizes all four measurements, and the glyph shows what
-lies behind it.
+lies behind it. In this plot, the ellipses are calculated from all the penguins, and the glyphs are those for the sample.
 
 ```{r}
 #| label: fig-pca
 #| fig-width: 8
 #| fig-height: 6
-#| fig-cap: Penguin glyphs in the space of the first two principal components
+#| fig-cap: Penguin glyphs in the space of the first two principal components, with 68% data ellipses for the species
 pca <- prcomp(peng[, 3:6], scale. = TRUE)
+scores <- data.frame(pca$x, species = peng$species)
 
-plot(pca$x[, 1:2], type = "n", asp = 1)
-penguin_points(pca$x[show, 1], pca$x[show, 2], samp)
-penguin_legend("top", samp$species, horiz = TRUE)
+tinyplot(PC2 ~ PC1 | species, data = scores,
+         type = type_ellipse(level = 0.68),
+         col = cols, lwd = 1.5,
+         bg = adjustcolor(cols, alpha.f = 0.15),
+         legend = FALSE, asp = 1,
+         xlim = extendrange(scores$PC1, f = 0.1),
+         ylim = extendrange(scores$PC2, f = 0.1))
+penguin_points(scores$PC1[show], scores$PC2[show], samp)
+penguin_legend("bottomleft", samp$species)
 ```
 
 ## Finding Patterns
@@ -219,19 +241,25 @@ and 35 is at the top of the fourth.
 #| label: fig-pca-outliers
 #| fig-width: 10
 #| fig-height: 5.5
-#| fig-cap: "The three most unusual penguins, shown as glyphs in plots of the first two principal components (left) and the last two (right)."
-op <- par(mfrow = c(1, 2), mar = c(4, 4, 2, 1))
+#| fig-cap: "The three most unusual penguins, shown as glyphs in plots of the first two principal components (left) and the last two (right), with 68% data ellipses for the species."
+op <- tpar(mfrow = c(1, 2))
 for (dims in list(1:2, 3:4)) {
-  plot(pca$x[, dims], asp = 1, pch = 16, cex = 0.7,
-       xlim = extendrange(pca$x[, dims[1]], f = 0.15),   # room for the glyphs
-       col = penguin_colors()[as.character(peng$species)],
-       main = paste("Dimensions", dims[1], "and", dims[2]))
-  penguin_points(pca$x[outliers, dims[1]], pca$x[outliers, dims[2]], peng[outliers, ],
+  pc <- paste0("PC", dims)
+  tinyplot(reformulate(paste(pc[1], "| species"), response = pc[2]), data = scores,
+           pch = 16, cex = 0.7,
+           col = cols, legend = FALSE, asp = 1,
+           xlim = extendrange(scores[[pc[1]]], f = 0.15),   # room for the glyphs
+           main = paste("Dimensions", dims[1], "and", dims[2]))
+  tinyplot_add(type = type_ellipse(level = 0.68), lwd = 1.5, 
+               bg = adjustcolor(cols, alpha.f = 0.15))
+  penguin_points(scores[outliers, pc[1]], scores[outliers, pc[2]], peng[outliers, ],
                  size = 0.7, id = TRUE)
 }
 penguin_legend("bottomright", peng$species)
-par(op)
+tpar(op)
 ```
+
+In the last two dimensions the species largely coincide, and the outliers are far outside all three ellipses.
 
 ### Visual Lineup
 

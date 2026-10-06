@@ -29,7 +29,8 @@ Suggests:
     heplots,
     aplpack,
     dplyr,
-    tidyr
+    tidyr,
+    tinyplot
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 URL: https://friendly.github.io/penguinglyphs/, https://github.com/friendly/penguinglyphs
