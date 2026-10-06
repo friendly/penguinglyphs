@@ -124,6 +124,40 @@ draw_penguin(2, 1, species="Chinstrap", sex="female", id="Chinstrap", size = 1.5
 draw_penguin(3, 1, species="Gentoo", sex="male", id="Gentoo", size = 1.5)
 ```
 
+These three differ only in color and in the shape of their eyes, because all the scale factors were left at their default of 1.
+
+### Summarizing groups
+
+A glyph need not stand for one penguin. Here, each glyph shows the *means* of the four measurements for a species,
+so the three can be compared as typical Adelie, Chinstrap and Gentoo penguins.
+
+The means are computed as a data frame with one row for each species. `penguin_points()`, described in the next section,
+then draws a glyph for each row at given coordinates, scaling the features relative to the full dataset
+in the same way as for individual penguins. A mean penguin has no sex, so I just alternate them, as above.
+
+```{r}
+means <- aggregate(cbind(bill_len, bill_dep, flipper_len, body_mass) ~ species,
+                   data = peng, FUN = mean)
+means$sex <- c("male", "female", "male")
+means
+```
+
+```{r}
+#| label: fig-means
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: Glyphs for the means of the measurements in each species
+plot(1, xlim=c(0,4), ylim=c(0,2), type="n", asp=1,
+     xlab="", ylab="", main="Species Means")
+
+penguin_points(c(0.75, 2, 3.25), rep(1, 3), means,
+               id = as.character(means$species), size = 1.3)
+```
+
+Now the glyphs differ in shape as well. The typical Gentoo has the largest body, the longest flippers and the thinnest bill.
+The typical Adelie and Chinstrap are nearly the same size, their mean body masses differing by less than 30 g, 
+but the Chinstrap has a much longer bill.
+
 ## Glyphs in Other Plots
 
 A glyph is sized in inches rather than in the units of the axes, so it has the same shape and size in any plot,

@@ -140,6 +140,51 @@ draw_penguin(3, 1, species="Gentoo", sex="male", id="Gentoo", size = 1.5)
 
 ![](introduction_files/figure-html/unnamed-chunk-6-1.png)
 
+These three differ only in color and in the shape of their eyes, because
+all the scale factors were left at their default of 1.
+
+### Summarizing groups
+
+A glyph need not stand for one penguin. Here, each glyph shows the
+*means* of the four measurements for a species, so the three can be
+compared as typical Adelie, Chinstrap and Gentoo penguins.
+
+The means are computed as a data frame with one row for each species.
+[`penguin_points()`](https://friendly.github.io/penguinglyphs/reference/penguin_points.md),
+described in the next section, then draws a glyph for each row at given
+coordinates, scaling the features relative to the full dataset in the
+same way as for individual penguins. A mean penguin has no sex, so I
+just alternate them, as above.
+
+``` r
+means <- aggregate(cbind(bill_len, bill_dep, flipper_len, body_mass) ~ species,
+                   data = peng, FUN = mean)
+means$sex <- c("male", "female", "male")
+means
+#>     species bill_len bill_dep flipper_len body_mass    sex
+#> 1    Adelie 38.82397 18.34726    190.1027  3706.164   male
+#> 2 Chinstrap 48.83382 18.42059    195.8235  3733.088 female
+#> 3    Gentoo 47.56807 14.99664    217.2353  5092.437   male
+```
+
+``` r
+plot(1, xlim=c(0,4), ylim=c(0,2), type="n", asp=1,
+     xlab="", ylab="", main="Species Means")
+
+penguin_points(c(0.75, 2, 3.25), rep(1, 3), means,
+               id = as.character(means$species), size = 1.3)
+```
+
+![Glyphs for the means of the measurements in each
+species](introduction_files/figure-html/fig-means-1.png)
+
+Glyphs for the means of the measurements in each species
+
+Now the glyphs differ in shape as well. The typical Gentoo has the
+largest body, the longest flippers and the thinnest bill. The typical
+Adelie and Chinstrap are nearly the same size, their mean body masses
+differing by less than 30 g, but the Chinstrap has a much longer bill.
+
 ## Glyphs in Other Plots
 
 A glyph is sized in inches rather than in the units of the axes, so it
@@ -153,6 +198,18 @@ symbols.
 [`penguin_legend()`](https://friendly.github.io/penguinglyphs/reference/penguin_colors.md)
 adds a legend for the species.
 
+These plots are drawn with the
+[tinyplot](https://grantmcdermott.com/tinyplot/) package, a lightweight
+extension of base R graphics that makes it easy to plot data by groups.
+Because it uses base graphics, penguin glyphs can be added to a
+[`tinyplot()`](https://grantmcdermott.com/tinyplot/man/tinyplot.html)
+just as they can to a
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html). In particular,
+it can draw a data ellipse for each species, to give a summary of the
+data that the glyphs can be seen against. I use 68% ellipses, lightly
+filled with a transparent version of the species color, the bivariate
+analog of a mean $\pm$ one standard deviation interval.
+
 Here, the glyphs for a sample of 40 penguins are the points in a
 scatterplot of body mass against flipper length. The glyphs repeat what
 the axes show, in that penguins toward the right have longer flippers
@@ -160,38 +217,59 @@ and those toward the top have larger bodies, but they also show the bill
 and the sex of each penguin.
 
 ``` r
+library(tinyplot)
+cols <- unname(penguin_colors())
+
 set.seed(42)
 show <- sample(nrow(peng), 40)
 samp <- peng[show, ]
 
-plot(body_mass ~ flipper_len, data = samp, type = "n",
-     xlab = "Flipper length (mm)", ylab = "Body mass (g)")
+tinyplot(body_mass ~ flipper_len | species, data = samp,
+         type = type_ellipse(level = 0.68),
+         col = cols, lwd = 1.5,
+         bg = adjustcolor(cols, alpha.f = 0.15),
+         legend = FALSE,
+         xlim = extendrange(samp$flipper_len, f = 0.1),   # room for the glyphs
+         ylim = extendrange(samp$body_mass, f = 0.1),
+         xlab = "Flipper length (mm)", ylab = "Body mass (g)")
 penguin_points(samp$flipper_len, samp$body_mass, samp)
 penguin_legend("topleft", samp$species)
 ```
 
-![Penguin glyphs as the point symbols in a
-scatterplot](introduction_files/figure-html/fig-scatter-1.png)
+![Penguin glyphs as the point symbols in a scatterplot, with 68% data
+ellipses for the
+species](introduction_files/figure-html/fig-scatter-1.png)
 
-Penguin glyphs as the point symbols in a scatterplot
+Penguin glyphs as the point symbols in a scatterplot, with 68% data
+ellipses for the species
 
 The coordinates need not be variables in the data. A more useful display
 puts the glyphs in the space of the first two principal components, so
 that position summarizes all four measurements, and the glyph shows what
-lies behind it.
+lies behind it. In this plot, the ellipses are calculated from all the
+penguins, and the glyphs are those for the sample.
 
 ``` r
 pca <- prcomp(peng[, 3:6], scale. = TRUE)
+scores <- data.frame(pca$x, species = peng$species)
 
-plot(pca$x[, 1:2], type = "n", asp = 1)
-penguin_points(pca$x[show, 1], pca$x[show, 2], samp)
-penguin_legend("top", samp$species, horiz = TRUE)
+tinyplot(PC2 ~ PC1 | species, data = scores,
+         type = type_ellipse(level = 0.68),
+         col = cols, lwd = 1.5,
+         bg = adjustcolor(cols, alpha.f = 0.15),
+         legend = FALSE, asp = 1,
+         xlim = extendrange(scores$PC1, f = 0.1),
+         ylim = extendrange(scores$PC2, f = 0.1))
+penguin_points(scores$PC1[show], scores$PC2[show], samp)
+penguin_legend("bottomleft", samp$species)
 ```
 
-![Penguin glyphs in the space of the first two principal
-components](introduction_files/figure-html/fig-pca-1.png)
+![Penguin glyphs in the space of the first two principal components,
+with 68% data ellipses for the
+species](introduction_files/figure-html/fig-pca-1.png)
 
-Penguin glyphs in the space of the first two principal components
+Penguin glyphs in the space of the first two principal components, with
+68% data ellipses for the species
 
 ## Finding Patterns
 
@@ -231,7 +309,7 @@ out <- heplots::cqplot(peng[, 3:6],
    cex.lab = 1.25)
 ```
 
-![](introduction_files/figure-html/unnamed-chunk-8-1.png)
+![](introduction_files/figure-html/unnamed-chunk-9-1.png)
 
 ``` r
 out
@@ -249,7 +327,7 @@ same case numbers as in the QQ plot.
 penguin_glyphs(peng[outliers,], ncol=3, main = "Notable Penguins")
 ```
 
-![](introduction_files/figure-html/unnamed-chunk-9-1.png)
+![](introduction_files/figure-html/unnamed-chunk-10-1.png)
 
 It also helps to see where they are in relation to the rest. Here, all
 the penguins are shown as small points in plots of the principal
@@ -266,28 +344,37 @@ and 10 are at opposite ends of the third dimension, and 35 is at the top
 of the fourth.
 
 ``` r
-op <- par(mfrow = c(1, 2), mar = c(4, 4, 2, 1))
+op <- tpar(mfrow = c(1, 2))
 for (dims in list(1:2, 3:4)) {
-  plot(pca$x[, dims], asp = 1, pch = 16, cex = 0.7,
-       xlim = extendrange(pca$x[, dims[1]], f = 0.15),   # room for the glyphs
-       col = penguin_colors()[as.character(peng$species)],
-       main = paste("Dimensions", dims[1], "and", dims[2]))
-  penguin_points(pca$x[outliers, dims[1]], pca$x[outliers, dims[2]], peng[outliers, ],
+  pc <- paste0("PC", dims)
+  tinyplot(reformulate(paste(pc[1], "| species"), response = pc[2]), data = scores,
+           pch = 16, cex = 0.7,
+           col = cols, legend = FALSE, asp = 1,
+           xlim = extendrange(scores[[pc[1]]], f = 0.15),   # room for the glyphs
+           main = paste("Dimensions", dims[1], "and", dims[2]))
+  tinyplot_add(type = type_ellipse(level = 0.68), lwd = 1.5, 
+               bg = adjustcolor(cols, alpha.f = 0.15))
+  penguin_points(scores[outliers, pc[1]], scores[outliers, pc[2]], peng[outliers, ],
                  size = 0.7, id = TRUE)
 }
 penguin_legend("bottomright", peng$species)
 ```
 
 ![The three most unusual penguins, shown as glyphs in plots of the first
-two principal components (left) and the last two
-(right).](introduction_files/figure-html/fig-pca-outliers-1.png)
+two principal components (left) and the last two (right), with 68% data
+ellipses for the
+species.](introduction_files/figure-html/fig-pca-outliers-1.png)
 
 The three most unusual penguins, shown as glyphs in plots of the first
-two principal components (left) and the last two (right).
+two principal components (left) and the last two (right), with 68% data
+ellipses for the species.
 
 ``` r
-par(op)
+tpar(op)
 ```
+
+In the last two dimensions the species largely coincide, and the
+outliers are far outside all three ellipses.
 
 ### Visual Lineup
 
@@ -309,7 +396,7 @@ lineup <- sample(cast, size = length(cast))
 penguin_glyphs(peng[lineup,], main = "Can you spot the outliers?")
 ```
 
-![](introduction_files/figure-html/unnamed-chunk-10-1.png)
+![](introduction_files/figure-html/unnamed-chunk-11-1.png)
 
 The outliers are peng 283, 10, 35. If you can’t find them without the
 labels, that says something about how well these glyphs convey what
@@ -329,7 +416,7 @@ penguin_glyphs(peng[sampled_rows, ],
                legend = list(loc = "bottom", horiz = TRUE))
 ```
 
-![](introduction_files/figure-html/unnamed-chunk-11-1.png)
+![](introduction_files/figure-html/unnamed-chunk-12-1.png)
 
 ### Scaling
 
@@ -344,14 +431,14 @@ Compare the three outliers, scaled in each way.
 penguin_glyphs(peng[outliers,], ncol = 3, main = "Scaled to all peng")
 ```
 
-![](introduction_files/figure-html/unnamed-chunk-12-1.png)
+![](introduction_files/figure-html/unnamed-chunk-13-1.png)
 
 ``` r
 penguin_glyphs(peng[outliers,], ncol = 3, main = "Scaled to these three",
                ref = peng[outliers,])
 ```
 
-![](introduction_files/figure-html/unnamed-chunk-13-1.png)
+![](introduction_files/figure-html/unnamed-chunk-14-1.png)
 
 ### Label Size
 
@@ -361,7 +448,7 @@ penguin_glyphs(peng[outliers,], ncol = 3, main = "Scaled to these three",
 penguin_glyphs(peng[sampled_rows, ], cex.lab = 0.7, main = "Smaller labels")
 ```
 
-![](introduction_files/figure-html/unnamed-chunk-14-1.png)
+![](introduction_files/figure-html/unnamed-chunk-15-1.png)
 
 ### Different Grid Layouts
 
@@ -372,7 +459,7 @@ penguin_glyphs(head(peng, 15),
                main = "Wide Layout")
 ```
 
-![](introduction_files/figure-html/unnamed-chunk-15-1.png)
+![](introduction_files/figure-html/unnamed-chunk-16-1.png)
 
 ## Interpreting the Glyphs
 

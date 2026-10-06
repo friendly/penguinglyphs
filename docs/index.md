@@ -1,10 +1,13 @@
 # penguinglyphs
 
-An experiment in visualizing multivariate penguin data as schematic
-penguin drawings. Physical measurements are mapped to visual features of
-penguin glyphs, making patterns in the data immediately apparent. Or do
-they? Designed to test some ideas in using glyphs to represent
-multivariate data, in a novel context.
+This package is an experiment in visualizing multivariate penguin data
+as schematic penguin drawings. Physical measurements are mapped to
+visual features of penguin glyphs, making patterns in the data
+immediately apparent. Or do they?
+
+It is designed to test some ideas in using glyphs to represent
+multivariate data, in a novel context, just to see what works, for what
+purpose.
 
 ## Installation
 
@@ -56,7 +59,15 @@ penguin_glyphs(penguins[sampled_rows, ], main = "Random Sample of Penguins")
 ![](reference/figures/README-basic-1.png)
 
 A penguin with missing measurements has those parts of the glyph drawn
-as dashed outlines.
+as dashed outlines. If its sex is unknown, the eyes are drawn as pupils
+only. Here, penguin 4 has no measurements at all, and the sex of penguin
+9 was not recorded.
+
+``` r
+penguin_glyphs(penguins[c(2, 4, 6, 9, 14), ], main = "")
+```
+
+![](reference/figures/README-missing-1.png)
 
 ### Drawing Individual Penguins
 
@@ -130,8 +141,8 @@ penguin_glyphs(peng[lineup,], main = "Can you spot the outliers?")
 
 ``` r
 # Customize legend placement
-penguin_glyphs(penguins[1:20,],
-               legend = list(loc = "bottom", horiz = FALSE))
+penguin_glyphs(penguins[sampled_rows,],
+               legend = list(loc = "bottom", horiz = TRUE))
 ```
 
 ![](reference/figures/README-legend-1.png)
@@ -167,9 +178,11 @@ clusters, and relationships that might be hidden in traditional plots.
 This package is designed to work with what was originally the [Palmer
 Penguins](https://allisonhorst.github.io/palmerpenguins/) dataset, but
 now (R 4.5.0) in
-[`datasets::penguins`](https://rdrr.io/r/datasets/penguins.html), a
-popular alternative to the iris dataset for data exploration and
-visualization examples.
+[`datasets::penguins`](https://rdrr.io/r/datasets/penguins.html), and in
+[`heplots::peng`](https://friendly.github.io/heplots/reference/peng.html)
+(which omits the NAs). This dataset is a popular alternative to the
+[`datasets::iris`](https://rdrr.io/r/datasets/iris.html) dataset for
+data exploration and visualization examples.
 
 ## License
 
